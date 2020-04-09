@@ -14,10 +14,10 @@ var (
 )
 
 type config struct {
-	Token   string      `env:"INPUT_TOKEN"`
-	Repo    string      `env:"INPUT_REPOSITORY"`
-	Event   string      `env:"INPUT_EVENT"`
-	Payload interface{} `env:"INPUT_PAYLOAD"`
+	Token   string `env:"INPUT_TOKEN"`
+	Repo    string `env:"INPUT_REPOSITORY"`
+	Event   string `env:"INPUT_EVENT"`
+	Payload string `env:"INPUT_PAYLOAD"`
 }
 
 func init() {
