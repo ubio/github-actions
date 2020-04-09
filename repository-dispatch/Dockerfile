@@ -15,7 +15,7 @@ FROM scratch
 ENV PATH=/bin
 ARG DIR
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-COPY --from=build /go/src/github.com/universalbasket/repository-dispatch/bin /bin/repository-dispatch
+COPY --from=build /go/src/github.com/universalbasket/github-actions/repository-dispatch/bin /bin/repository-dispatch
 COPY --from=build /etc/passwd /etc/passwd
 USER user
 ENTRYPOINT [ "./bin/repository-dispatch"]
