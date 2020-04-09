@@ -6,7 +6,7 @@ jobs:
     name: Run the repository dispatch action
     steps:
       - name: Run
-        uses: universalbasket/github-actions/repository-dispatch@v1
+        uses: universalbasket/github-actions/repository-dispatch@master
         with:
           token: "token"
           repository: "abc"
