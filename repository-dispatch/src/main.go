@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 
 	"github.com/caarlos0/env"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v30/github"
 	"golang.org/x/oauth2"
 )
 
@@ -29,9 +30,9 @@ func init() {
 
 func main() {
 
-	client := buildClient()
+	client, ctx := buildClient()
 
-	resp, err := client.Repositories.Dispatch(ctx, "", cfg.Repo, buildDispatchRequestOptions())
+	_, resp, err := client.Repositories.Dispatch(ctx, "", cfg.Repo, buildDispatchRequestOptions())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -39,7 +40,7 @@ func main() {
 	spew.Dump(resp)
 }
 
-func buildClient() *github.Client {
+func buildClient() (*github.Client, context.Context) {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{
@@ -48,11 +49,11 @@ func buildClient() *github.Client {
 	)
 	tc := oauth2.NewClient(ctx, ts)
 
-	return github.NewClient(tc)
+	return github.NewClient(tc), ctx
 }
 
 func buildDispatchRequestOptions() github.DispatchRequestOptions {
-	msg := []byte(cfg.Payload)
+	msg := json.RawMessage([]byte(cfg.Payload))
 
 	return github.DispatchRequestOptions{
 		EventType:     cfg.Event,
