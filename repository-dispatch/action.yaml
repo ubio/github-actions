@@ -16,11 +16,6 @@ inputs:
 runs:
   using: docker
   main: Dockerfile
-  args:
-    - ${{ inputs.token }}
-    - ${{ inputs.repository }}
-    - ${{ inputs.event }}
-    - ${{ inputs.payload }}
 branding:
   icon: target
   color: gray-dark
