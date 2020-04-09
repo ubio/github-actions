@@ -1,0 +1,14 @@
+on: [push]
+
+jobs:
+  repository_dispatch:
+    runs-on: ubuntu-latest
+    name: Run the repository dispatch action
+    steps:
+      - name: Run
+        uses: universalbasket/github-actions/hello-world-docker-action@v1
+        with:
+          token: "token"
+          repository: "abc"
+          event: "etype"
+          payload: '{"json":"here"}'
