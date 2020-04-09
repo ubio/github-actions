@@ -32,7 +32,7 @@ func main() {
 
 	client, ctx := buildClient()
 
-	_, resp, err := client.Repositories.Dispatch(ctx, cfg.Owner, cfg.Repo, buildDispatchRequestOptions())
+	_, _, err := client.Repositories.Dispatch(ctx, cfg.Owner, cfg.Repo, buildDispatchRequestOptions())
 	if err != nil {
 		log.Fatal(err)
 	}
