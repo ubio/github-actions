@@ -12,4 +12,4 @@ jobs:
           owner: ${{ secrets.REPO_DISPATCH_OWNER }}
           repository: ${{ secrets.REPO_DISPATCH_REPO }}
           event: ${{ secrets.REPO_DISPATCH_EVENT }}
-          payload: '{"extra":"info"}'
+          payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "anything": "here"}'
