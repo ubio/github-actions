@@ -9,6 +9,7 @@ jobs:
         uses: universalbasket/github-actions/repository-dispatch@master
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          repository: "universalbasket/k8s"
+          owner: "universalbasket"
+          repository: "k8s"
           event: "container-build"
           payload: '{"json":"here"}'

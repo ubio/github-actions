@@ -4,9 +4,12 @@ inputs:
   token:
     description: A GitHub Personal Access Token - get it from `1Password > Github - ubiobot`
     required: true
+  owner:
+    description: The owner of the repository to send the dispatch event to (eg `universalbasket`)
+    required: true
   repository:
-    description: The name of the repository to send the dispatch events to (eg `universalbasket/k8s`)
-    default: current_repo
+    description: The name of the repository to send the dispatch event to (eg `my-repo`)
+    required: true
   event:
     description: The event type
     required: true
@@ -18,6 +21,7 @@ runs:
   image: "Dockerfile"
   args:
     - ${{ inputs.token }}
+    - ${{ inputs.owner }}
     - ${{ inputs.repository }}
     - ${{ inputs.event }}
     - ${{ inputs.payload }}

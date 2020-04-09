@@ -17,6 +17,7 @@ var (
 
 type config struct {
 	Token   string `env:"INPUT_TOKEN"`
+	Owner   string `env:"INPUT_OWNER"`
 	Repo    string `env:"INPUT_REPOSITORY"`
 	Event   string `env:"INPUT_EVENT"`
 	Payload string `env:"INPUT_PAYLOAD"`
@@ -32,7 +33,7 @@ func main() {
 
 	client, ctx := buildClient()
 
-	_, resp, err := client.Repositories.Dispatch(ctx, "", cfg.Repo, buildDispatchRequestOptions())
+	_, resp, err := client.Repositories.Dispatch(ctx, cfg.Owner, cfg.Repo, buildDispatchRequestOptions())
 	if err != nil {
 		log.Fatal(err)
 	}
