@@ -1,7 +1,7 @@
 FROM alpine:latest as certs
 RUN apk --update add ca-certificates
 
-FROM golang:1.13.7-alpine3.11 as build
+FROM golang:1.14.2-alpine3.11 as build
 WORKDIR /go/src/github.com/universalbasket/github-actions/repository-dispatch
 RUN apk update && \
   apk upgrade && \
@@ -18,4 +18,4 @@ COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certifica
 COPY --from=build /go/src/github.com/universalbasket/github-actions/repository-dispatch/bin /bin/repository-dispatch
 COPY --from=build /etc/passwd /etc/passwd
 USER user
-ENTRYPOINT [ "./bin/repository-dispatch"]
+ENTRYPOINT [ "/bin/repository-dispatch"]
