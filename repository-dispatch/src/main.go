@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/caarlos0/env"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/google/go-github/v30/github"
 	"golang.org/x/oauth2"
 )
@@ -37,8 +36,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	spew.Dump(resp)
 }
 
 func buildClient() (*github.Client, context.Context) {
