@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/caarlos0/env"
@@ -26,22 +25,37 @@ func init() {
 	if err := env.Parse(&cfg); err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf("%+v\n", cfg)
 }
 
 func main() {
 
-	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: cfg.Token},
-	)
-	tc := oauth2.NewClient(ctx, ts)
+	client := buildClient()
 
-	client := github.NewClient(tc)
-	repos, _, err := client.Repositories.List(ctx, "", nil)
+	resp, err := client.Repositories.Dispatch(ctx, "", cfg.Repo, buildDispatchRequestOptions())
 	if err != nil {
 		log.Fatal(err)
 	}
-	spew.Dump(repos)
+
+	spew.Dump(resp)
+}
+
+func buildClient() *github.Client {
+	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{
+			AccessToken: cfg.Token,
+		},
+	)
+	tc := oauth2.NewClient(ctx, ts)
+
+	return github.NewClient(tc)
+}
+
+func buildDispatchRequestOptions() github.DispatchRequestOptions {
+	msg := []byte(cfg.Payload)
+
+	return github.DispatchRequestOptions{
+		EventType:     cfg.Event,
+		ClientPayload: &msg,
+	}
 }

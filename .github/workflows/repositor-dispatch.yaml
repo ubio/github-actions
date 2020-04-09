@@ -9,6 +9,6 @@ jobs:
         uses: universalbasket/github-actions/repository-dispatch@master
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          repository: "abc"
-          event: "etype"
+          repository: "universalbasket/k8s"
+          event: "container-build"
           payload: '{"json":"here"}'
