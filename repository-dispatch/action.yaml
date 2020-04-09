@@ -1,0 +1,26 @@
+name: Repository Dispatch
+description: Create a repository dispatch event
+inputs:
+  token:
+    description: A GitHub Personal Access Token - get it from `1Password > Github - ubiobot`
+    required: true
+  repository:
+    description: The name of the repository to send the dispatch events to (eg `universalbasket/k8s`)
+    default: current_repo
+  event:
+    description: The event type
+    required: true
+  payload:
+    description: JSON payload with data that your target action or worklow may use
+    default: "{}"
+runs:
+  using: docker
+  main: Dockerfile
+  args:
+    - ${{ inputs.token }}
+    - ${{ inputs.repository }}
+    - ${{ inputs.event }}
+    - ${{ inputs.payload }}
+branding:
+  icon: target
+  color: gray-dark
