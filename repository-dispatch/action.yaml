@@ -14,8 +14,13 @@ inputs:
     description: JSON payload with data that your target action or worklow may use
     default: "{}"
 runs:
-  using: docker
-  main: Dockerfile
+  using: "docker"
+  main: "Dockerfile"
+  args:
+    - ${{ inputs.token }}
+    - ${{ inputs.repository }}
+    - ${{ inputs.event }}
+    - ${{ inputs.payload }}
 branding:
   icon: target
   color: gray-dark
