@@ -8,7 +8,7 @@ jobs:
       - name: Run
         uses: universalbasket/github-actions/repository-dispatch@master
         with:
-          token: "token"
+          token: ${{ secrets.ACCESS_TOKEN }}
           repository: "abc"
           event: "etype"
           payload: '{"json":"here"}'
