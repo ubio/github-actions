@@ -1,12 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 
 	"github.com/caarlos0/env"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
 )
 
 var (
@@ -30,7 +31,12 @@ func init() {
 
 func main() {
 
-	client := github.NewClient(nil)
+	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: cfg.Token},
+	)
+	tc := oauth2.NewClient(ctx, ts)
 
-	spew.Dump(client)
+	client := github.NewClient(tc)
+	repos, _, err := client.Repositories.List(ctx, "", nil)
 }
