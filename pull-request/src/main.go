@@ -45,8 +45,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	spew.Dump(tree)
 	c, _, err := client.Git.CreateCommit(ctx, cfg.Owner, cfg.Repo, buildCommit(tree))
-	spew.Dump(cfg)
 	spew.Dump(c)
 	if err != nil {
 		log.Fatal(err)
