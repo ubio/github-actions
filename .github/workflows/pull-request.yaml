@@ -24,7 +24,7 @@ jobs:
           repository: ${{ secrets.PR_REPO }}
           title: ${{ secrets.PR_TITLE }}
           body: ${{ secrets.PR_BODY }}
-          head: simple-branch-name
+          head: test-${{ github.run_id }}
           base: ${{ secrets.PR_BASE }}
           draft: ${{ secrets.PR_DRAFT }}
           maintainer_can_modify: ${{ secrets.PR_MAINTAINERS_CAN_MODIFY }}
