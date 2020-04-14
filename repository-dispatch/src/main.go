@@ -11,7 +11,10 @@ import (
 )
 
 var (
-	cfg config
+	err    error
+	cfg    config
+	client *github.Client
+	ctx    context.Context
 )
 
 type config struct {
@@ -23,31 +26,30 @@ type config struct {
 }
 
 func init() {
-	if err := env.Parse(&cfg); err != nil {
+	if err = env.Parse(&cfg); err != nil {
 		log.Fatal(err)
 	}
+	ctx = context.Background()
+	initClient()
+}
+
+func initClient() {
+	client = github.NewClient(
+		oauth2.NewClient(
+			ctx, oauth2.StaticTokenSource(
+				&oauth2.Token{
+					AccessToken: cfg.Token,
+				},
+			),
+		),
+	)
 }
 
 func main() {
-
-	client, ctx := buildClient()
-
-	_, _, err := client.Repositories.Dispatch(ctx, cfg.Owner, cfg.Repo, buildDispatchRequestOptions())
+	_, _, err = client.Repositories.Dispatch(ctx, cfg.Owner, cfg.Repo, buildDispatchRequestOptions())
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func buildClient() (*github.Client, context.Context) {
-	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{
-			AccessToken: cfg.Token,
-		},
-	)
-	tc := oauth2.NewClient(ctx, ts)
-
-	return github.NewClient(tc), ctx
 }
 
 func buildDispatchRequestOptions() github.DispatchRequestOptions {
