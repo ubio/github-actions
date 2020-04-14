@@ -41,6 +41,7 @@ func main() {
 	client, ctx := buildClient()
 
 	c, _, err := client.Git.CreateCommit(ctx, cfg.Owner, cfg.Repo, buildCommit())
+	spew.Dump(cfg)
 	spew.Dump(c)
 	if err != nil {
 		log.Fatal(err)
