@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
-	"time"
 
 	"github.com/caarlos0/env"
 	"github.com/google/go-github/v30/github"
@@ -26,7 +25,6 @@ type config struct {
 	Owner   string `env:"INPUT_OWNER,required"`
 	Repo    string `env:"INPUT_REPOSITORY,required"`
 	Message string `env:"INPUT_MESSAGE,required"`
-	SHA     string `env:"INPUT_GIT_SHA,required"`
 	Files   string `env:"INPUT_FILES"`
 
 	// PR Vars
@@ -76,9 +74,6 @@ func main() {
 	tree, err := getTree(ref)
 	if err != nil {
 		log.Fatalf("Unable to create the tree based on the provided files: %s\n", err)
-	}
-	if err != nil {
-		log.Fatal(err)
 	}
 
 	if err := pushCommit(ref, tree); err != nil {
@@ -138,11 +133,7 @@ func pushCommit(ref *github.Reference, tree *github.Tree) (err error) {
 	parent.Commit.SHA = parent.SHA
 
 	// Create the commit using the tree.
-	date := time.Now()
-	name := "ubiobot"
-	email := "ubiobot@users.noreply.github.com"
-	author := &github.CommitAuthor{Date: &date, Name: &name, Email: &email}
-	commit := &github.Commit{Author: author, Message: &cfg.Message, Tree: tree, Parents: []*github.Commit{parent.Commit}}
+	commit := &github.Commit{Message: &cfg.Message, Tree: tree, Parents: []*github.Commit{parent.Commit}}
 	newCommit, _, err := client.Git.CreateCommit(ctx, cfg.Owner, cfg.Repo, commit)
 	if err != nil {
 		return err

@@ -12,9 +12,6 @@ inputs:
       Comma-separated list of files to commit and their location.
       Example: pull-request/README.md,pull-request/src/main.go
     required: true
-  git_sha:
-    description: The git SHA
-    required: true
   owner:
     description: The owner of the repo to create a PR on (eg `universalbasket`)
     required: true
@@ -48,7 +45,6 @@ runs:
     - ${{ inputs.token }}
     - ${{ inputs.message }}
     - ${{ inputs.files }}
-    - ${{ inputs.git_sha }}
     - ${{ inputs.owner }}
     - ${{ inputs.repository }}
     - ${{ inputs.title }}
