@@ -40,7 +40,12 @@ func main() {
 
 	client, ctx := buildClient()
 
-	c, _, err := client.Git.CreateCommit(ctx, cfg.Owner, cfg.Repo, buildCommit())
+	tree, _, err := client.Git.GetTree(ctx, cfg.Owner, cfg.Repo, cfg.SHA, false)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c, _, err := client.Git.CreateCommit(ctx, cfg.Owner, cfg.Repo, buildCommit(tree))
 	spew.Dump(cfg)
 	spew.Dump(c)
 	if err != nil {
@@ -76,11 +81,9 @@ func buildPullRequest() *github.NewPullRequest {
 	}
 }
 
-func buildCommit() *github.Commit {
+func buildCommit(tree *github.Tree) *github.Commit {
 	return &github.Commit{
 		Message: &cfg.Message,
-		Tree: &github.Tree{
-			SHA: &cfg.SHA,
-		},
+		Tree:    tree,
 	}
 }
