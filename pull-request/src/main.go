@@ -6,9 +6,9 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/caarlos0/env"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/google/go-github/v30/github"
 	"golang.org/x/oauth2"
 )
@@ -80,11 +80,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	spew.Dump(tree)
-	c, _, err := client.Git.CreateCommit(ctx, cfg.Owner, cfg.Repo, buildCommit(tree))
-	spew.Dump(c)
-	if err != nil {
-		log.Fatal(err)
+	if err := pushCommit(ref, tree); err != nil {
+		log.Fatalf("Unable to create the commit: %s\n", err)
 	}
 
 	_, _, err = client.PullRequests.Create(ctx, cfg.Owner, cfg.Repo, buildPullRequest())
@@ -109,6 +106,31 @@ func buildCommit(tree *github.Tree) *github.Commit {
 		Message: &cfg.Message,
 		Tree:    tree,
 	}
+}
+
+// createCommit creates the commit in the given reference using the given tree.
+func pushCommit(ref *github.Reference, tree *github.Tree) (err error) {
+	// Get the parent commit to attach the commit to.
+	parent, _, err := client.Repositories.GetCommit(ctx, cfg.Owner, cfg.Repo, *ref.Object.SHA)
+	if err != nil {
+		return err
+	}
+	// This is not always populated, but is needed.
+	parent.Commit.SHA = parent.SHA
+
+	// Create the commit using the tree.
+	date := time.Now()
+	author := &github.CommitAuthor{Date: &date}
+	commit := &github.Commit{Author: author, Message: &cfg.Message, Tree: tree, Parents: []*github.Commit{parent.Commit}}
+	newCommit, _, err := client.Git.CreateCommit(ctx, cfg.Owner, cfg.Repo, commit)
+	if err != nil {
+		return err
+	}
+
+	// Attach the commit to the master branch.
+	ref.Object.SHA = newCommit.SHA
+	_, _, err = client.Git.UpdateRef(ctx, cfg.Owner, cfg.Repo, ref, false)
+	return err
 }
 
 func getRef() (ref *github.Reference, err error) {
