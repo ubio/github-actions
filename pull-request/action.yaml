@@ -4,6 +4,9 @@ inputs:
   token:
     description: A GitHub Personal Access Token
     required: true
+  message:
+    description: The commit message
+    required: true
   owner:
     description: The owner of the repo to create a PR on (eg `universalbasket`)
     required: true
@@ -35,6 +38,7 @@ runs:
   image: "Dockerfile"
   args:
     - ${{ inputs.token }}
+    - ${{ inputs.message }}
     - ${{ inputs.owner }}
     - ${{ inputs.repository }}
     - ${{ inputs.title }}

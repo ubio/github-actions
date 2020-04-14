@@ -11,12 +11,11 @@ jobs:
         run: git branch simple-branch-name
       - name: Make change
         run: echo "World" > hello.txt
-      - name: Commit change
-        run: git commit -m "Hello world"
       - name: Run
         uses: universalbasket/github-actions/pull-request@master
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
+          message: test commit
           owner: ${{ secrets.PR_OWNER }}
           repository: ${{ secrets.PR_REPO }}
           title: ${{ secrets.PR_TITLE }}

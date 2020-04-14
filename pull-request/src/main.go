@@ -14,9 +14,10 @@ var (
 )
 
 type config struct {
-	Token string `env:"INPUT_TOKEN,required"`
-	Owner string `env:"INPUT_OWNER,required"`
-	Repo  string `env:"INPUT_REPOSITORY,required"`
+	Token   string `env:"INPUT_TOKEN,required"`
+	Owner   string `env:"INPUT_OWNER,required"`
+	Repo    string `env:"INPUT_REPOSITORY,required"`
+	Message string `env:"INPUT_MESSAGE,required"`
 
 	// PR Vars
 	Title               string `env:"INPUT_TITLE,required"`
@@ -37,7 +38,12 @@ func main() {
 
 	client, ctx := buildClient()
 
-	_, _, err := client.PullRequests.Create(ctx, cfg.Owner, cfg.Repo, buildPullRequest())
+	_, _, err := client.Git.CreateCommit(ctx, cfg.Owner, cfg.Repo, buildCommit())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, _, err = client.PullRequests.Create(ctx, cfg.Owner, cfg.Repo, buildPullRequest())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -63,5 +69,11 @@ func buildPullRequest() *github.NewPullRequest {
 		Body:                github.String(cfg.Body),
 		MaintainerCanModify: github.Bool(cfg.MaintainerCanModify),
 		Draft:               github.Bool(cfg.Draft),
+	}
+}
+
+func buildCommit() *github.Commit {
+	return &github.Commit{
+		Message: &cfg.Message,
 	}
 }
