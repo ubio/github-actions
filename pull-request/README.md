@@ -1,6 +1,6 @@
 # Pull Request
 
-Creates a branch, commits changes and then generates a pull request against a repository.
+Creates a branch, commits the changes in `files` and then generates a pull request against a repository.
 
 The PR author is set to the owner of the access token.
 
