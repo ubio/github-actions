@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/caarlos0/env"
 	"github.com/google/go-github/v30/github"
@@ -136,7 +137,12 @@ func pushCommit(ref *github.Reference, tree *github.Tree) (err error) {
 	// This is not always populated, but is needed.
 	parent.Commit.SHA = parent.SHA
 
-	commit := &github.Commit{Message: &cfg.Message, Tree: tree, Parents: []*github.Commit{parent.Commit}}
+	// Create the commit using the tree.
+	date := time.Now()
+	name := "ubiobot"
+	email := "ubiobot@users.noreply.github.com"
+	author := &github.CommitAuthor{Date: &date, Name: &name, Email: &email}
+	commit := &github.Commit{Author: author, Message: &cfg.Message, Tree: tree, Parents: []*github.Commit{parent.Commit}}
 	newCommit, _, err := client.Git.CreateCommit(ctx, cfg.Owner, cfg.Repo, commit)
 	if err != nil {
 		return err
