@@ -2,7 +2,10 @@ package main
 
 import (
 	"context"
+	"errors"
+	"io/ioutil"
 	"log"
+	"strings"
 
 	"github.com/caarlos0/env"
 	"github.com/davecgh/go-spew/spew"
@@ -11,7 +14,10 @@ import (
 )
 
 var (
-	cfg config
+	err    error
+	cfg    config
+	client *github.Client
+	ctx    context.Context
 )
 
 type config struct {
@@ -20,6 +26,7 @@ type config struct {
 	Repo    string `env:"INPUT_REPOSITORY,required"`
 	Message string `env:"INPUT_MESSAGE,required"`
 	SHA     string `env:"INPUT_GIT_SHA,required"`
+	Files   string `env:"INPUT_FILES"`
 
 	// PR Vars
 	Title               string `env:"INPUT_TITLE,required"`
@@ -31,16 +38,44 @@ type config struct {
 }
 
 func init() {
-	if err := env.Parse(&cfg); err != nil {
+	if err = env.Parse(&cfg); err != nil {
 		log.Fatal(err)
 	}
+	ctx = context.Background()
+	initClient()
+}
+
+func initClient() {
+	client = github.NewClient(
+		oauth2.NewClient(
+			ctx, oauth2.StaticTokenSource(
+				&oauth2.Token{
+					AccessToken: cfg.Token,
+				},
+			),
+		),
+	)
 }
 
 func main() {
 
-	client, ctx := buildClient()
+	// @todo add check
+	if cfg.Files == "" {
+		// skip branch + commit
+	}
 
-	tree, _, err := client.Git.GetTree(ctx, cfg.Owner, cfg.Repo, cfg.SHA, false)
+	ref, err := getRef()
+	if err != nil {
+		log.Fatalf("Unable to get/create the commit reference: %s\n", err)
+	}
+	if ref == nil {
+		log.Fatalf("No error where returned but the reference is nil")
+	}
+
+	tree, err := getTree(ref)
+	if err != nil {
+		log.Fatalf("Unable to create the tree based on the provided files: %s\n", err)
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,18 +91,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func buildClient() (*github.Client, context.Context) {
-	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{
-			AccessToken: cfg.Token,
-		},
-	)
-	tc := oauth2.NewClient(ctx, ts)
-
-	return github.NewClient(tc), ctx
 }
 
 func buildPullRequest() *github.NewPullRequest {
@@ -86,4 +109,56 @@ func buildCommit(tree *github.Tree) *github.Commit {
 		Message: &cfg.Message,
 		Tree:    tree,
 	}
+}
+
+func getRef() (ref *github.Reference, err error) {
+	if ref, _, err = client.Git.GetRef(ctx, cfg.Owner, cfg.Repo, "refs/heads/"+cfg.Head); err == nil {
+		return ref, nil
+	}
+
+	if cfg.Head == cfg.Base {
+		return nil, errors.New("`base` is the same as `head`")
+	}
+
+	var baseRef *github.Reference
+	if baseRef, _, err = client.Git.GetRef(ctx, cfg.Owner, cfg.Repo, "refs/heads/"+cfg.Base); err != nil {
+		return nil, err
+	}
+	newRef := &github.Reference{Ref: github.String("refs/heads/" + cfg.Head), Object: &github.GitObject{SHA: baseRef.Object.SHA}}
+	ref, _, err = client.Git.CreateRef(ctx, cfg.Owner, cfg.Repo, newRef)
+	return ref, err
+}
+
+func getFileContent(fileArg string) (targetName string, b []byte, err error) {
+	var localFile string
+	files := strings.Split(fileArg, ":")
+	switch {
+	case len(files) < 1:
+		return "", nil, errors.New("No files supplied")
+	case len(files) == 1:
+		localFile = files[0]
+		targetName = files[0]
+	default:
+		localFile = files[0]
+		targetName = files[1]
+	}
+
+	b, err = ioutil.ReadFile(localFile)
+	return targetName, b, err
+}
+
+func getTree(ref *github.Reference) (tree *github.Tree, err error) {
+
+	entries := []*github.TreeEntry{}
+
+	for _, fileArg := range strings.Split(cfg.Files, ",") {
+		file, content, err := getFileContent(fileArg)
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, &github.TreeEntry{Path: github.String(file), Type: github.String("blob"), Content: github.String(string(content)), Mode: github.String("100644")})
+	}
+
+	tree, _, err = client.Git.CreateTree(ctx, cfg.Owner, cfg.Repo, *ref.Object.SHA, entries)
+	return tree, err
 }
