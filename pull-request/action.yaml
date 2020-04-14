@@ -7,6 +7,9 @@ inputs:
   message:
     description: The commit message
     required: true
+  git_sha:
+    description: The git SHA
+    required: true
   owner:
     description: The owner of the repo to create a PR on (eg `universalbasket`)
     required: true
@@ -39,6 +42,7 @@ runs:
   args:
     - ${{ inputs.token }}
     - ${{ inputs.message }}
+    - ${{ inputs.git_sha }}
     - ${{ inputs.owner }}
     - ${{ inputs.repository }}
     - ${{ inputs.title }}

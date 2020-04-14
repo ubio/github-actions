@@ -18,6 +18,7 @@ type config struct {
 	Owner   string `env:"INPUT_OWNER,required"`
 	Repo    string `env:"INPUT_REPOSITORY,required"`
 	Message string `env:"INPUT_MESSAGE,required"`
+	SHA     string `env:"INPUT_GIT_SHA,required"`
 
 	// PR Vars
 	Title               string `env:"INPUT_TITLE,required"`
@@ -75,5 +76,8 @@ func buildPullRequest() *github.NewPullRequest {
 func buildCommit() *github.Commit {
 	return &github.Commit{
 		Message: &cfg.Message,
+		Tree: &github.Tree{
+			SHA: &cfg.SHA,
+		},
 	}
 }

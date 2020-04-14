@@ -16,6 +16,7 @@ jobs:
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           message: test commit
+          git_sha: ${{ GITHUB_SHA }}
           owner: ${{ secrets.PR_OWNER }}
           repository: ${{ secrets.PR_REPO }}
           title: ${{ secrets.PR_TITLE }}
