@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"strings"
@@ -84,9 +85,8 @@ func main() {
 		log.Fatalf("Unable to create the commit: %s\n", err)
 	}
 
-	_, _, err = client.PullRequests.Create(ctx, cfg.Owner, cfg.Repo, buildPullRequest())
-	if err != nil {
-		log.Fatal(err)
+	if err := createPR(); err != nil {
+		log.Fatalf("Error while creating the pull request: %s", err)
 	}
 }
 
@@ -99,6 +99,25 @@ func buildPullRequest() *github.NewPullRequest {
 		MaintainerCanModify: github.Bool(cfg.MaintainerCanModify),
 		Draft:               github.Bool(cfg.Draft),
 	}
+}
+
+func createPR() (err error) {
+
+	newPR := &github.NewPullRequest{
+		Title:               &cfg.Title,
+		Head:                &cfg.Head,
+		Base:                &cfg.Base,
+		Body:                &cfg.Body,
+		MaintainerCanModify: &cfg.MaintainerCanModify,
+	}
+
+	pr, _, err := client.PullRequests.Create(ctx, cfg.Owner, cfg.Repo, newPR)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("PR created: %s\n", pr.GetHTMLURL())
+	return nil
 }
 
 func buildCommit(tree *github.Tree) *github.Commit {
