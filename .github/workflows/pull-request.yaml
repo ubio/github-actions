@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Create branch
-        run: git branch ${{ secrets.PR_HEAD }}-{{ GITHUB_RUN_ID }}
+        run: git branch simple-branch-name
       - name: Make change
         run: echo "World" > hello.txt
       - name: Commit change
@@ -21,7 +21,7 @@ jobs:
           repository: ${{ secrets.PR_REPO }}
           title: ${{ secrets.PR_TITLE }}
           body: ${{ secrets.PR_BODY }}
-          head: ${{ secrets.PR_HEAD }}-{{ GITHUB_RUN_ID }}
+          head: simple-branch-name
           base: ${{ secrets.PR_BASE }}
           draft: ${{ secrets.PR_DRAFT }}
           maintainer_can_modify: ${{ secrets.PR_MAINTAINERS_CAN_MODIFY }}
