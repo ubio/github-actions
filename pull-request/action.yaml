@@ -38,6 +38,9 @@ inputs:
     description: Whether repo maintainers can modify the PR
     required: false
     default: true
+output:
+  pr:
+    description: A link to the PR
 runs:
   using: "docker"
   image: "Dockerfile"

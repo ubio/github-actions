@@ -82,6 +82,7 @@ func main() {
 	}
 	log.Println("PR created:", pr.GetHTMLURL())
 
+	fmt.Println(fmt.Sprintf(`::set-output name=pr::%s`, pr.GetHTMLURL()))
 }
 
 // createPR builds and creates the PR on github
