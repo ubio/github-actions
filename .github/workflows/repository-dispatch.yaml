@@ -1,5 +1,9 @@
 name: Test Repository Dispatch
-on: [push]
+
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   repository_dispatch:

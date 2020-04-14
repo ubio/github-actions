@@ -29,11 +29,8 @@ func init() {
 	if err = env.Parse(&cfg); err != nil {
 		log.Fatal(err)
 	}
-	ctx = context.Background()
-	initClient()
-}
 
-func initClient() {
+	ctx = context.Background()
 	client = github.NewClient(
 		oauth2.NewClient(
 			ctx, oauth2.StaticTokenSource(
