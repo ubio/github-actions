@@ -1,0 +1,48 @@
+name: Pull Request
+description: Create a pull request
+inputs:
+  token:
+    description: A GitHub Personal Access Token
+    required: true
+  owner:
+    description: The owner of the repo to create a PR on (eg `universalbasket`)
+    required: true
+  repository:
+    description: The name of the repo to create a PR on (eg `my-repo`)
+    required: true
+  title:
+    description: The PR title
+    required: true
+  body:
+    description: The body of the PR
+    required: false
+  head:
+    description: Name of branch where changes are implemented
+    required: true
+  base:
+    description: Name of branch where changes should be pulled into
+    required: true
+  draft:
+    description: Whether the PR is in draft status
+    required: false
+    default: false
+  maintainer_can_modify:
+    description: Whether repo maintainers can modify the PR
+    required: false
+    default: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.token }}
+    - ${{ inputs.owner }}
+    - ${{ inputs.repository }}
+    - ${{ inputs.title }}
+    - ${{ inputs.body }}
+    - ${{ inputs.head }}
+    - ${{ inputs.base }}
+    - ${{ inputs.draft }}
+    - ${{ inputs.maintainer_can_modify }}
+branding:
+  icon: target
+  color: gray-dark

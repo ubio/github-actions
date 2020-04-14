@@ -1,0 +1,25 @@
+on: [push]
+
+jobs:
+  repository_dispatch:
+    runs-on: ubuntu-latest
+    name: Run the pull request action
+    steps:
+      - name: Create branch
+        run: git branch ${{ secrets.PR_HEAD }}-{{ GITHUB_RUN_ID }}
+      - name: Make change
+        run: echo "World" > hello.txt
+      - name: Commit change
+        run: git commit -m "Hello world"
+      - name: Run
+        uses: universalbasket/github-actions/pull-request@master
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          owner: ${{ secrets.PR_OWNER }}
+          repository: ${{ secrets.PR_REPO }}
+          title: ${{ secrets.PR_TITLE }}
+          body: ${{ secrets.PR_BODY }}
+          head: ${{ secrets.PR_HEAD }}-{{ GITHUB_RUN_ID }}
+          base: ${{ secrets.PR_BASE }}
+          draft: ${{ secrets.PR_DRAFT }}
+          maintainer_can_modify: ${{ secrets.PR_MAINTAINERS_CAN_MODIFY }}

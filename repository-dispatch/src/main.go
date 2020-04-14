@@ -15,10 +15,10 @@ var (
 )
 
 type config struct {
-	Token   string `env:"INPUT_TOKEN"`
-	Owner   string `env:"INPUT_OWNER"`
-	Repo    string `env:"INPUT_REPOSITORY"`
-	Event   string `env:"INPUT_EVENT"`
+	Token   string `env:"INPUT_TOKEN,required"`
+	Owner   string `env:"INPUT_OWNER,required"`
+	Repo    string `env:"INPUT_REPOSITORY,required"`
+	Event   string `env:"INPUT_EVENT,required"`
 	Payload string `env:"INPUT_PAYLOAD"`
 }
 
