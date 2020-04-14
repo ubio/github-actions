@@ -1,3 +1,4 @@
+name: Test Repository Dispatch
 on: [push]
 
 jobs:

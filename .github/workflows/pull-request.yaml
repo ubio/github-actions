@@ -1,3 +1,4 @@
+name: Test Pull Request
 on: [push]
 
 jobs:
@@ -5,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Run the pull request action
     steps:
+      - uses: actions/checkout@v2
       - name: Create branch
         run: git branch ${{ secrets.PR_HEAD }}-{{ GITHUB_RUN_ID }}
       - name: Make change
