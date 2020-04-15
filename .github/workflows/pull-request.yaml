@@ -17,11 +17,10 @@ jobs:
         uses: universalbasket/github-actions/pull-request@master
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          message: test commit
-          files: hello.txt
-          git_sha: ${{ github.sha }}
           owner: ${{ secrets.PR_OWNER }}
           repository: ${{ secrets.PR_REPO }}
+          message: test commit
+          files: hello.txt
           title: ${{ secrets.PR_TITLE }}
           body: ${{ secrets.PR_BODY }}
           head: test-${{ github.run_id }}
