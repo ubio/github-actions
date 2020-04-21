@@ -29,13 +29,14 @@ func main() {
 	}
 
 	l := "2006-01-02 15:04:05 -0700 MST"
+	now := time.Now()
 	for _, cert := range certs {
 		expires, err := time.Parse(l, cert.NotAfter)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(cert.DomainName, "expires:", expires)
-	}
 
-	// spew.Dump(certs)
+		diff := expires.Sub(now)
+		fmt.Println(cert.DomainName, "expires in", diff)
+	}
 }
