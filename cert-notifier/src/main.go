@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"math"
 	"os"
 	"strconv"
 	"time"
@@ -22,12 +21,22 @@ type cert struct {
 	Sans       []string `json:"sans"`
 }
 
+func (c cert) until() int64 {
+
+	l := "2006-01-02 15:04:05 -0700 MST"
+	now := time.Now()
+
+	expires, err := time.Parse(l, c.NotAfter)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return int64(expires.Sub(now).Hours() / 24)
+}
+
 func main() {
 	input := os.Getenv("INPUT_CERTS")
-	warnUnderDays, err := strconv.ParseFloat(
-		os.Getenv("INPUT_WARN_UNDER_DAYS"),
-		64,
-	)
+	warnUnderDays, err := strconv.ParseInt(os.Getenv("INPUT_WARN_UNDER_DAYS"), 10, 64)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,18 +46,24 @@ func main() {
 		log.Fatal(err)
 	}
 
-	l := "2006-01-02 15:04:05 -0700 MST"
-	now := time.Now()
+	expiring := make([]cert, 0)
 	for _, cert := range certs {
-		expires, err := time.Parse(l, cert.NotAfter)
-		if err != nil {
-			log.Fatal(err)
+		expires := cert.until()
+		fmt.Printf("Checked %s. Expires in %.b days", cert.DomainName, expires)
+		if expires < warnUnderDays {
+			expiring = append(expiring, cert)
 		}
+	}
 
-		days := expires.Sub(now).Hours() / 24
-		fmt.Printf("Checked %s. Expires in %f days", cert.DomainName, math.Round(days))
-		if days < warnUnderDays {
-			fmt.Println(cert.DomainName, "expiring!!! In", days, "days")
-		}
+	if len(expiring) == 0 {
+		return
+	}
+
+	warn(expiring)
+}
+
+func warn(certs []cert) {
+	for _, cert := range certs {
+		fmt.Println(cert.DomainName, "expiring!!! In", cert.until(), "days")
 	}
 }
