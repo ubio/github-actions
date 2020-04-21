@@ -2,14 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
+	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/prometheus/common/log"
 )
 
 type cert struct {
-	Domain     string   `json:"domainName"`
+	DomainName string   `json:"domainName"`
 	IP         string   `json:"ip"`
 	Issuer     string   `json:"issuer"`
 	CommonName string   `json:"commonName"`
@@ -26,5 +27,15 @@ func main() {
 	if err := json.Unmarshal([]byte(input), &certs); err != nil {
 		log.Fatal(err)
 	}
-	spew.Dump(certs)
+
+	l := "2006-01-02 15:04:05 -0700 MST"
+	for _, cert := range certs {
+		expires, err := time.Parse(l, cert.NotAfter)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(cert.DomainName, "expires:", expires)
+	}
+
+	// spew.Dump(certs)
 }
