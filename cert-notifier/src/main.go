@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/prometheus/common/log"
@@ -22,6 +24,13 @@ type cert struct {
 
 func main() {
 	input := os.Getenv("INPUT_CERTS")
+	warnUnderDays, err := strconv.ParseFloat(
+		os.Getenv("INPUT_WARN_UNDER_DAYS"),
+		64,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	certs := make([]cert, 0)
 	if err := json.Unmarshal([]byte(input), &certs); err != nil {
@@ -37,6 +46,9 @@ func main() {
 		}
 
 		days := expires.Sub(now).Hours() / 24
-		fmt.Println(cert.DomainName, "expires in", days, "days")
+		fmt.Printf("Checked %s. Expires in %f days", cert.DomainName, math.Round(days))
+		if days < warnUnderDays {
+			fmt.Println(cert.DomainName, "expiring!!! In", days, "days")
+		}
 	}
 }
