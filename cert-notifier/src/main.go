@@ -36,7 +36,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		diff := expires.Sub(now)
-		fmt.Println(cert.DomainName, "expires in", diff)
+		days := expires.Sub(now).Hours() / 24
+		fmt.Println(cert.DomainName, "expires in", days, "days")
 	}
 }
