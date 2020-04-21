@@ -63,7 +63,9 @@ func main() {
 }
 
 func warn(certs []cert) {
-	fmt.Println("\n!!! WARNINGS: !!!\n")
+	fmt.Println("-----------------")
+	fmt.Println("!!! WARNINGS: !!!")
+	fmt.Println("")
 	for _, cert := range certs {
 		fmt.Println(cert.DomainName, "expiring in", cert.until(), "days")
 	}
