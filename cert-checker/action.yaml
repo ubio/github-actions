@@ -1,0 +1,15 @@
+name: Cert Checker
+description: Checks certificates of supplied domains
+inputs:
+  cmd:
+    description: Command to run
+    required: true
+    default: "-f json api.automationcloud.net"
+outputs:
+  result:
+    description: The result of the check
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.cmd }}
