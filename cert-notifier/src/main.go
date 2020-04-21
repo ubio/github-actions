@@ -49,7 +49,7 @@ func main() {
 	expiring := make([]cert, 0)
 	for _, cert := range certs {
 		expires := cert.until()
-		fmt.Printf("Checked %s - expires in %d days\n", cert.DomainName, expires)
+		fmt.Printf("Checked %s - expires in %d days (%s)\n", cert.DomainName, expires, cert.NotAfter)
 		if expires < warnUnderDays {
 			expiring = append(expiring, cert)
 		}
