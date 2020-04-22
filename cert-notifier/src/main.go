@@ -29,7 +29,7 @@ func (c cert) slackBlock() *slack.SectionBlock {
 			slack.NewTextBlockObject("mrkdwn", c.DomainName, false, false),
 			slack.NewTextBlockObject("mrkdwn", c.Issuer, false, false),
 			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":point_right: %s", c.IP), false, false),
-			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":bomb: %d days", c.until()), false, false),
+			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":boom: %d days", c.until()), false, false),
 		},
 		nil,
 	)
