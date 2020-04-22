@@ -26,10 +26,10 @@ func (c cert) slackBlock() *slack.SectionBlock {
 	return slack.NewSectionBlock(
 		nil,
 		[]*slack.TextBlockObject{
-			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":globe_with_meridians: %s\n", c.DomainName), false, false),
-			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":suspect: %s\n", c.Issuer), false, false),
-			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":point_right: %s\n", c.IP), false, false),
-			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":bomb: %d days\n", c.until()), false, false),
+			slack.NewTextBlockObject("mrkdwn", c.DomainName, false, false),
+			slack.NewTextBlockObject("mrkdwn", c.Issuer, false, false),
+			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":point_right: %s", c.IP), false, false),
+			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":bomb: %d days", c.until()), false, false),
 		},
 		nil,
 	)
@@ -105,7 +105,7 @@ func warn(certs []cert) {
 	}
 
 	api := slack.New(os.Getenv("INPUT_SLACK_TOKEN"))
-	_, _, err := api.PostMessage("@aw", slack.MsgOptionBlocks(fields...))
+	_, _, err := api.PostMessage(os.Getenv("INPUT_CHANNEL"), slack.MsgOptionBlocks(fields...))
 	if err != nil {
 		log.Fatal(err)
 	}
