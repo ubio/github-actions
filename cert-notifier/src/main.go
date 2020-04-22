@@ -26,10 +26,10 @@ func (c cert) slackBlock() *slack.SectionBlock {
 	return slack.NewSectionBlock(
 		nil,
 		[]*slack.TextBlockObject{
-			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Domain Name:* %s", c.DomainName), false, false),
-			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*IP:* %s", c.IP), false, false),
-			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Issuer:* %s", c.Issuer), false, false),
-			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*Expires in:* (%d days)", c.until()), false, false),
+			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":globe_with_meridians: %s", c.DomainName), false, false),
+			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":point_right: *IP:* %s", c.IP), false, false),
+			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*:suspect: Issuer:* %s", c.Issuer), false, false),
+			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*:boom: Expires in:* (%d days)", c.until()), false, false),
 		},
 		nil,
 	)
