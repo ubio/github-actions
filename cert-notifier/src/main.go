@@ -27,8 +27,8 @@ func (c cert) slackBlock() *slack.SectionBlock {
 		nil,
 		[]*slack.TextBlockObject{
 			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":globe_with_meridians: %s\n", c.DomainName), false, false),
-			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":point_right: %s\n", c.IP), false, false),
 			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":suspect: %s\n", c.Issuer), false, false),
+			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":point_right: %s\n", c.IP), false, false),
 			slack.NewTextBlockObject("mrkdwn", fmt.Sprintf(":boom: %d days\n", c.until()), false, false),
 		},
 		nil,
