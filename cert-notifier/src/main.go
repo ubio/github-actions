@@ -96,8 +96,12 @@ func warn(certs []cert) {
 	)
 
 	div := slack.NewDividerBlock()
-	for _, cert := range certs {
-		fields = append(fields, div, cert.slackBlock())
+	for i, cert := range certs {
+		if i == 0 {
+			fields = append(fields, cert.slackBlock())
+		} else {
+			fields = append(fields, div, cert.slackBlock())
+		}
 	}
 
 	api := slack.New(os.Getenv("INPUT_SLACK_TOKEN"))
