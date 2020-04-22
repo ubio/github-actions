@@ -11,19 +11,19 @@ jobs:
     name: Run the pull request action
     steps:
       - uses: actions/checkout@v2
-      - name: Make change
-        run: echo "World" > hello.txt
-      - name: Run
-        uses: universalbasket/github-actions/pull-request@master
-        with:
-          token: ${{ secrets.ACCESS_TOKEN }}
-          owner: ${{ secrets.PR_OWNER }}
-          repository: ${{ secrets.PR_REPO }}
-          message: test commit
-          files: hello.txt
-          title: ${{ secrets.PR_TITLE }}
-          body: ${{ secrets.PR_BODY }}
-          head: test-${{ github.run_id }}
-          base: ${{ secrets.PR_BASE }}
-          draft: ${{ secrets.PR_DRAFT }}
-          maintainer_can_modify: ${{ secrets.PR_MAINTAINERS_CAN_MODIFY }}
+      # - name: Make change
+      #   run: echo "World" > hello.txt
+      # - name: Run
+      #   uses: universalbasket/github-actions/pull-request@master
+      #   with:
+      #     token: ${{ secrets.ACCESS_TOKEN }}
+      #     owner: ${{ secrets.PR_OWNER }}
+      #     repository: ${{ secrets.PR_REPO }}
+      #     message: test commit
+      #     files: hello.txt
+      #     title: ${{ secrets.PR_TITLE }}
+      #     body: ${{ secrets.PR_BODY }}
+      #     head: test-${{ github.run_id }}
+      #     base: ${{ secrets.PR_BASE }}
+      #     draft: ${{ secrets.PR_DRAFT }}
+      #     maintainer_can_modify: ${{ secrets.PR_MAINTAINERS_CAN_MODIFY }}
