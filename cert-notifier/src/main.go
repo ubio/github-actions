@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/nlopes/slack"
 	"github.com/prometheus/common/log"
-	"github.com/slack-go/slack"
 )
 
 type cert struct {
@@ -113,26 +113,7 @@ func warn(certs []cert) {
 		return
 	}
 
-	// fmt.Println(string(b))
-
 	api := slack.New(os.Getenv("INPUT_SLACK_TOKEN"))
 	_, _, err = api.PostMessage("@aw", slack.MsgOptionText(string(b), true))
 
-	// attachment := slack.Attachment{
-	// 	Pretext: "some pretext",
-	// 	Text:    "some text",
-	// 	Fields: []slack.AttachmentField{
-	// 		slack.AttachmentField{
-	// 			Title: "a",
-	// 			Value: "no",
-	// 		},
-	// 	},
-	// }
-
-	// channelID, timestamp, err := api.PostMessage("@aw", slack.MsgOptionText("Some text", false), slack.MsgOptionAttachments(attachment))
-	// if err != nil {
-	// 	fmt.Printf("%s\n", err)
-	// 	return
-	// }
-	// fmt.Printf("Message successfully sent to channel %s at %s", channelID, timestamp)
 }
