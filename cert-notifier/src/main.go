@@ -89,7 +89,7 @@ func warn(certs []cert) {
 	fields = append(
 		fields,
 		slack.NewSectionBlock(
-			slack.NewTextBlockObject("mrkdwn", "SSL Certificates have been checked and need attention", false, false),
+			slack.NewTextBlockObject("mrkdwn", "Our SSL Certificates have been checked and need attention:", false, false),
 			nil,
 			nil,
 		),
