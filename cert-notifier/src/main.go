@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/nlopes/slack"
 	"github.com/prometheus/common/log"
+	"github.com/slack-go/slack"
 )
 
 type cert struct {
@@ -71,19 +71,22 @@ func warn(certs []cert) {
 		fmt.Println(cert.DomainName, "expiring in", cert.until(), "days")
 	}
 
-	attachments := make([]slack.Attachment, 0)
-
-	attachments = append(attachments, slack.Attachment{
-		Color:    "good",
-		Fallback: "You successfully posted by Incoming Webhook URL!",
-		Text:     "Text in Slack uses the same system of escaping: chat messages, direct messages, file comments, etc. :smile:\nSee <https://api.slack.com/docs/message-formatting#linking_to_channels_and_users>",
-	})
-	msg := slack.WebhookMessage{
-		Attachments: attachments,
+	api := slack.New(os.Getenv("INPUT_SLACK_TOKEN"))
+	attachment := slack.Attachment{
+		Pretext: "some pretext",
+		Text:    "some text",
+		Fields: []slack.AttachmentField{
+			slack.AttachmentField{
+				Title: "a",
+				Value: "no",
+			},
+		},
 	}
 
-	err := slack.PostWebhook(os.Getenv("INPUT_SLACK_URL"), &msg)
+	channelID, timestamp, err := api.PostMessage("@aw", slack.MsgOptionText("Some text", false), slack.MsgOptionAttachments(attachment))
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("%s\n", err)
+		return
 	}
+	fmt.Printf("Message successfully sent to channel %s at %s", channelID, timestamp)
 }
