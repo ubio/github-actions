@@ -107,12 +107,16 @@ func warn(certs []cert) {
 		actionBlock,
 	)
 
-	api := slack.New(os.Getenv("INPUT_SLACK_TOKEN"))
-	_, _, err := api.PostMessage("@aw", slack.MsgOptionText(msg, true))
+	b, err := json.MarshalIndent(msg, "", "    ")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return
 	}
+
+	// fmt.Println(string(b))
+
+	api := slack.New(os.Getenv("INPUT_SLACK_TOKEN"))
+	_, _, err = api.PostMessage("@aw", slack.MsgOptionText(b, true))
 
 	// attachment := slack.Attachment{
 	// 	Pretext: "some pretext",
