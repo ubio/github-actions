@@ -22,6 +22,19 @@ type cert struct {
 	Sans       []string `json:"sans"`
 }
 
+func (c cert) slackBlock() *slack.SectionBlock {
+	return slack.NewSectionBlock(
+		nil,
+		[]*slack.TextBlockObject{
+			slack.NewTextBlockObject("mrkdwn", "*Domain Name:*\nComputer (laptop)", false, false),
+			slack.NewTextBlockObject("mrkdwn", "*IP:*\nSubmitted Aut 10", false, false),
+			slack.NewTextBlockObject("mrkdwn", "*Issuer:*\nMar 10, 2015 (3 years, 5 months)", false, false),
+			slack.NewTextBlockObject("mrkdwn", "*Expires:*\n\"Cheetah Pro 15\" - Fast, really fast\"", false, false),
+		},
+		nil,
+	)
+}
+
 func (c cert) until() int64 {
 
 	l := "2006-01-02 15:04:05 -0700 MST"
@@ -69,46 +82,25 @@ func warn(certs []cert) {
 	fmt.Println("")
 
 	for _, cert := range certs {
-		fmt.Println(cert.DomainName, "expiring in", cert.until(), "days")
+		fmt.Println(cert.DomainName, "expires in", cert.until(), "days")
 	}
-	headerText := slack.NewTextBlockObject("mrkdwn", "You have a new request:\n*<fakeLink.toEmployeeProfile.com|Fred Enriquez - New device request>*", false, false)
-	headerSection := slack.NewSectionBlock(headerText, nil, nil)
 
-	// Fields
-	typeField := slack.NewTextBlockObject("mrkdwn", "*Type:*\nComputer (laptop)", false, false)
-	whenField := slack.NewTextBlockObject("mrkdwn", "*When:*\nSubmitted Aut 10", false, false)
-	lastUpdateField := slack.NewTextBlockObject("mrkdwn", "*Last Update:*\nMar 10, 2015 (3 years, 5 months)", false, false)
-	reasonField := slack.NewTextBlockObject("mrkdwn", "*Reason:*\nAll vowel keys aren't working.", false, false)
-	specsField := slack.NewTextBlockObject("mrkdwn", "*Specs:*\n\"Cheetah Pro 15\" - Fast, really fast\"", false, false)
-
-	fieldSlice := make([]*slack.TextBlockObject, 0)
-	fieldSlice = append(fieldSlice, typeField)
-	fieldSlice = append(fieldSlice, whenField)
-	fieldSlice = append(fieldSlice, lastUpdateField)
-	fieldSlice = append(fieldSlice, reasonField)
-	fieldSlice = append(fieldSlice, specsField)
-
-	fieldsSection := slack.NewSectionBlock(nil, fieldSlice, nil)
-
-	// Approve and Deny Buttons
-	approveBtnTxt := slack.NewTextBlockObject("plain_text", "Approve", false, false)
-	approveBtn := slack.NewButtonBlockElement("", "click_me_123", approveBtnTxt)
-
-	denyBtnTxt := slack.NewTextBlockObject("plain_text", "Deny", false, false)
-	denyBtn := slack.NewButtonBlockElement("", "click_me_123", denyBtnTxt)
-
-	actionBlock := slack.NewActionBlock("", approveBtn, denyBtn)
-
-	// Build Message with blocks created above
-
-	msg := slack.MsgOptionBlocks(
-		headerSection,
-		fieldsSection,
-		actionBlock,
+	fields := make([]slack.Block, 0)
+	fields = append(
+		fields,
+		slack.NewSectionBlock(
+			slack.NewTextBlockObject("mrkdwn", "SSL Certificates have been checked and need attention", false, false),
+			nil,
+			nil,
+		),
 	)
 
+	for _, cert := range certs {
+		fields = append(fields, cert.slackBlock())
+	}
+
 	api := slack.New(os.Getenv("INPUT_SLACK_TOKEN"))
-	_, _, err := api.PostMessage("@aw", msg)
+	_, _, err := api.PostMessage("@aw", slack.MsgOptionBlocks(fields...))
 	if err != nil {
 		log.Fatal(err)
 	}
