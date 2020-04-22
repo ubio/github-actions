@@ -1,0 +1,23 @@
+name: Cert Notifier
+description: Given an input from cert-checker, notify when certs are due to expire
+inputs:
+  warn_under_days:
+    description: Number of days within warning window (eg `30` warns on all certs that are due to expire within 30 days)
+    required: true
+  certs:
+    description: A JSON string of the certs checked from the cert-checker action (output.result)
+    required: true
+  channel:
+    description: The slack channel to notify
+    required: true
+  slack_token:
+    description: Your slack token
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.warn_under_days }}
+    - ${{ inputs.certs }}
+    - ${{ inputs.channel }}
+    - ${{ inputs.slack_token }}
