@@ -101,19 +101,16 @@ func warn(certs []cert) {
 
 	// Build Message with blocks created above
 
-	msg := slack.NewBlockMessage(
+	msg := slack.MsgOptionBlocks(
 		headerSection,
 		fieldsSection,
 		actionBlock,
 	)
 
-	b, err := json.MarshalIndent(msg, "", "    ")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
 	api := slack.New(os.Getenv("INPUT_SLACK_TOKEN"))
-	_, _, err = api.PostMessage("@aw", slack.MsgOptionText(string(b), true))
+	_, _, err := api.PostMessage("@aw", msg)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
