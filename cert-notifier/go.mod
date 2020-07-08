@@ -1,4 +1,4 @@
-module github.com/universalbasket/github-actions/cert-notifier
+module github.com/ubio/github-actions/cert-notifier
 
 go 1.13
 

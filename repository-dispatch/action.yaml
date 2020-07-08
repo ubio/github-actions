@@ -5,7 +5,7 @@ inputs:
     description: A GitHub Personal Access Token which can access the target repo
     required: true
   owner:
-    description: The owner of the repo to send the dispatch event to (eg `universalbasket`)
+    description: The owner of the repo to send the dispatch event to (eg `ubio`)
     required: true
   repository:
     description: The name of the repo to send the dispatch event to (eg `my-repo`)

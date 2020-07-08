@@ -1,4 +1,4 @@
-module github.com/universalbasket/github-actions/repository-dispatch/src
+module github.com/ubio/github-actions/repository-dispatch/src
 
 go 1.13
 

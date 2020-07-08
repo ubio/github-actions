@@ -7,10 +7,10 @@ Cert Checker usage:
 ```yaml
 - name: Check
   id: check
-  uses: universalbasket/github-actions/cert-checker@master
+  uses: ubio/github-actions/cert-checker@master
 
 - name: Notify
-  uses: universalbasket/github-actions/cert-notifier@master
+  uses: ubio/github-actions/cert-notifier@master
   with:
     warn_under_days: 30
     channel: "#general"

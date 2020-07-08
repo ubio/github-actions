@@ -9,7 +9,7 @@ This is a custom event you can describe which can in turn be used to trigger a w
 | Input       | Required  | Default | Description
 | ----------- | --------- | ------- | -----------
 | token       | `true`    |         | A GitHub Personal Access Token which can access the target repo
-| owner       | `true`    |         | The owner of the repo to send the dispatch event to (eg `universalbasket`)
+| owner       | `true`    |         | The owner of the repo to send the dispatch event to (eg `ubio`)
 | repository  | `true`    |         | The name of the repo to send the dispatch event to (eg `my-repo`)
 | event       | `true`    |         | The event type
 | payload     | `false`   | `{}`    | JSON payload with data that your target action or worklow may use
@@ -18,7 +18,7 @@ This is a custom event you can describe which can in turn be used to trigger a w
 
 ```yaml
 - name: Run
-  uses: universalbasket/github-actions/repository-dispatch@master
+  uses: ubio/github-actions/repository-dispatch@master
   with:
     token: ${{ secrets.ACCESS_TOKEN }}
     owner: "github-owner"

@@ -6,7 +6,7 @@ Usage:
 
 ```yaml
 - name: Run
-  uses: universalbasket/github-actions/cert-checker@master
+  uses: ubio/github-actions/cert-checker@master
   with:
     cmd: "-f json api.automationcloud.net"
 ```

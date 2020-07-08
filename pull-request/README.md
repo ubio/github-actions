@@ -9,7 +9,7 @@ The PR author is set to the owner of the access token.
 | Input                 | Required  | Default | Description
 | --------------------- | --------- | ------- | -----------
 | token                 | `true`    |         | A GitHub Personal Access Token which can access the target repo
-| owner                 | `true`    |         | The owner of the repo to create the PR on (eg `universalbasket`)
+| owner                 | `true`    |         | The owner of the repo to create the PR on (eg `ubio`)
 | repository            | `true`    |         | The name of the repo to create the PR on (eg `my-repo`)
 | message               | `true`    |         | The commit message
 | files                 | `true`    |         | Comma-separated list of files to commit and their location. Example: `pull-request/README.md,pull-request/src/main.go`
@@ -24,10 +24,10 @@ The PR author is set to the owner of the access token.
 
 ```yaml
 - name: Run
-  uses: universalbasket/github-actions/pull-request@master
+  uses: ubio/github-actions/pull-request@master
   with:
     token: ${{ secrets.ACCESS_TOKEN }}
-    owner: "universalbasket"
+    owner: "ubio"
     repository: "my-repo"
     message: "Update readme"
     files: "README.md"

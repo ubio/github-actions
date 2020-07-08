@@ -13,7 +13,7 @@ inputs:
       Example: pull-request/README.md,pull-request/src/main.go
     required: true
   owner:
-    description: The owner of the repo to create a PR on (eg `universalbasket`)
+    description: The owner of the repo to create a PR on (eg `ubio`)
     required: true
   repository:
     description: The name of the repo to create a PR on (eg `my-repo`)
