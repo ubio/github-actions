@@ -1,0 +1,19 @@
+name: RSS(lack)
+description: Send a simple message to a slack channel
+inputs:
+  channel:
+    description: The slack channel to notify
+    required: true
+  message:
+    description: The message body
+    required: true
+  slack_token:
+    description: Your slack token
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.channel }}
+    - ${{ inputs.message }}
+    - ${{ inputs.slack_token }}

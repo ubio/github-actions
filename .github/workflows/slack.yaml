@@ -1,0 +1,19 @@
+name: Test Slack
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  repository_dispatch:
+    runs-on: ubuntu-latest
+    name: Run the pull request action
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run
+        uses: ubio/github-actions/rssslack@master
+        with:
+          channel: "@aw"
+          message: "👋 hey from slack"
+          slack_token: ${{ secrets.PRSSLACK_TOKEN }}

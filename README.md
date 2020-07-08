@@ -25,3 +25,9 @@ Inspect SSL certificates for given domains.
 Based on JSON output from a [cert checker](./cert-checker) action, parse the results and notify Slack if certificates are expiring.
 
 [View more](./cert-notifier).
+
+## RSS(lack)
+
+Really Simple Slack notifier
+
+[View more](./rsslack).
