@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run
-        uses: ubio/github-actions/rssslack@master
+        uses: ubio/github-actions/rsslack@master
         with:
           channel: "@aw"
           message: "👋 hey from slack"
