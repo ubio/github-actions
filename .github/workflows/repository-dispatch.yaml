@@ -11,7 +11,7 @@ jobs:
     name: Run the repository dispatch action
     steps:
       - name: Run
-        uses: ubio/github-actions/repository-dispatch@master
+        uses: docker://automationcloud/repository-dispatch:latest
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           owner: ${{ secrets.REPO_DISPATCH_OWNER }}

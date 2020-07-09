@@ -14,7 +14,7 @@ jobs:
       # - name: Make change
       #   run: echo "World" > hello.txt
       # - name: Run
-      #   uses: ubio/github-actions/pull-request@master
+      #   uses: docker://automationcloud/pull-request:latest@master
       #   with:
       #     token: ${{ secrets.ACCESS_TOKEN }}
       #     owner: ${{ secrets.PR_OWNER }}
