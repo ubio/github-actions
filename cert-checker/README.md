@@ -25,7 +25,7 @@ Usage (optimised):
 
 ```yaml
 - name: Run
-  uses: docker://autoamtioncloud/cert-checker@master
+  uses: docker://automationcloud/cert-checker@master
   with:
     cmd: "-f json api.automationcloud.net"
 ```

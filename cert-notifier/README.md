@@ -35,10 +35,10 @@ Usage (optimised):
 ```yaml
 - name: Check
   id: check
-  uses: docker://autoamtioncloud/cert-checker:latest
+  uses: docker://automationcloud/cert-checker:latest
 
 - name: Notify
-  uses: docker://autoamtioncloud/cert-notifier:latest
+  uses: docker://automationcloud/cert-notifier:latest
   with:
     warn_under_days: 30
     channel: "#general"
