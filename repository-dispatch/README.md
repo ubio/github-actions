@@ -16,9 +16,24 @@ This is a custom event you can describe which can in turn be used to trigger a w
 
 ## Example Usage
 
+Usage (build action):
+
 ```yaml
 - name: Run
   uses: ubio/github-actions/repository-dispatch@master
+  with:
+    token: ${{ secrets.ACCESS_TOKEN }}
+    owner: "github-owner"
+    repository: "repo-name"
+    event: "your-event"
+    payload: '{"extra":"info"}'
+```
+
+Usage (optimised):
+
+```yaml
+- name: Run
+  uses: docker://automationcloud/repository-dispatch@master
   with:
     token: ${{ secrets.ACCESS_TOKEN }}
     owner: "github-owner"
