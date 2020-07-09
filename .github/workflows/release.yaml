@@ -21,6 +21,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: automationcloud/cert-checker
           path: ./cert-checker
+          tags: latest
           tag_with_sha: true
 
   release-cert-notifier:
@@ -36,6 +37,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: automationcloud/cert-notifier
           path: ./cert-notifier
+          tags: latest
           tag_with_sha: true
 
   release-pull-request:
@@ -51,6 +53,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: automationcloud/pull-request
           path: ./pull-request
+          tags: latest
           tag_with_sha: true
 
   release-repository-dispatch:
@@ -66,6 +69,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: automationcloud/repository-dispatch
           path: ./repository-dispatch
+          tags: latest
           tag_with_sha: true
 
   release-rsslack:
@@ -81,4 +85,5 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: automationcloud/rsslack
           path: ./rsslack
+          tags: latest
           tag_with_sha: true
