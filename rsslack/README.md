@@ -8,7 +8,7 @@ Usage:
 - name: Notify Slack
   uses: ubio/github-actions/slack-notifier@master
   with:
-    channel: "#ci"
+    channel: ${{ secrets.SLACK_CHANNEL }}
     message: "👋 from RSS(lack)"
     slack_token: ${{ secrets.SLACK_TOKEN }}
 ```
