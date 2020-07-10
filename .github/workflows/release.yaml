@@ -102,14 +102,14 @@ jobs:
           path: ./slack-docker-build-success
           tags: latest
           tag_with_sha: true
-      # - name: Notify Slack
-      #   if: ${{ success() }}
-      #   uses: docker://automationcloud/slack-docker-build-success:latest
-      #   with:
-      #     channel: ${{ secrets.SLACK_CHANNEL }}
-      #     slack_token: ${{ secrets.SLACK_TOKEN }}
-      #     name: "Github Action `slack-docker-build-success`"
-      #     registry: registry.hub.docker.com
-      #     namespace: automationcloud
-      #     image: slack-docker-build-success
-      #     tag: latest
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/slack-docker-build-success:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          name: "Github Action `slack-docker-build-success`"
+          registry: registry.hub.docker.com
+          namespace: automationcloud
+          image: slack-docker-build-success
+          tag: latest
