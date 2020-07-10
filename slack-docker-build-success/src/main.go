@@ -24,7 +24,7 @@ type EnvVars struct {
 	Registry  string `envconfig:"INPUT_REGISTRY" required:"true"`
 	Namespace string `envconfig:"INPUT_NAMESPACE" required:"true"`
 	Image     string `envconfig:"INPUT_IMAGE" required:"true"`
-	Tag       string `envconfig:"INPUT_REGISTRY_PATH" required:"true"`
+	Tag       string `envconfig:"INPUT_TAG" required:"true"`
 }
 
 func main() {
