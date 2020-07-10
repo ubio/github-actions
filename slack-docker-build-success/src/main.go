@@ -8,7 +8,7 @@ import (
 	"github.com/nlopes/slack"
 )
 
-const template = "*%s* has been built :package:\n<%s/%s/%s:%s|%s/%s:%s>"
+const template = "*%s* has been built :package:\n`docker pull %s/%s/%s:%s`"
 
 var (
 	vars EnvVars
@@ -34,7 +34,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	msg := fmt.Sprintf(template, vars.Name, vars.Registry, vars.Namespace, vars.Image, vars.Tag, vars.Namespace, vars.Image, vars.Tag)
+	msg := fmt.Sprintf(template, vars.Name, vars.Registry, vars.Namespace, vars.Image, vars.Tag)
 
 	api := slack.New(vars.Token)
 	channelID, timestamp, err := api.PostMessage(vars.Channel, slack.MsgOptionText(msg, false))

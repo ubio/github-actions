@@ -31,8 +31,8 @@ This build step:
     tag: 27.8.1-rc1
 ```
 
-Generates the [following message in Slack](https://app.slack.com/block-kit-builder/T02FBD280#%7B%22blocks%22:%5B%7B%22type%22:%22section%22,%22text%22:%7B%22type%22:%22mrkdwn%22,%22text%22:%22*My%20Project*%20has%20been%20built%20:package:%5Cn%3Cregistry.hub.docker.com/automationcloud/my-project:27.8.1-rc1%7Cautomationcloud/my-project:27.8.1-rc1%3E%22%7D%7D%5D%7D):
+Generates the [following message in Slack](https://app.slack.com/block-kit-builder/T02FBD280#%7B%22blocks%22:%5B%7B%22type%22:%22section%22,%22text%22:%7B%22type%22:%22mrkdwn%22,%22text%22:%22*My%20Project*%20has%20been%20built%20:package:%5Cn%60docker%20pull%20registry.hub.docker.com/automationcloud/my-project:27.8.1-rc1%60%22%7D%7D%5D%7D):
 
 ```markdown
-*My Project* has been built :package:\n<registry.hub.docker.com/automationcloud/my-project:27.8.1-rc1|automationcloud/my-project:27.8.1-rc1>
+*My Project* has been built :package:\n`docker pull registry.hub.docker.com/automationcloud/my-project:27.8.1-rc1`
 ```
