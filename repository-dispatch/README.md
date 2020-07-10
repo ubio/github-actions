@@ -33,7 +33,7 @@ Usage (optimised):
 
 ```yaml
 - name: Run
-  uses: docker://automationcloud/repository-dispatch@master
+  uses: docker://automationcloud/repository-dispatch:latest
   with:
     token: ${{ secrets.ACCESS_TOKEN }}
     owner: "github-owner"
