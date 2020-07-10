@@ -8,7 +8,7 @@ import (
 	"github.com/nlopes/slack"
 )
 
-const template = "*%s* has been built :package:\n< %s/%s/%s:%s|%s/%s:%s>"
+const template = "*%s* has been built :package:\n<%s/%s/%s:%s|%s/%s:%s>"
 
 var (
 	vars EnvVars
