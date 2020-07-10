@@ -22,9 +22,30 @@ The PR author is set to the owner of the access token.
 
 ## Example Usage
 
+Usage (build action):
+
 ```yaml
 - name: Run
   uses: ubio/github-actions/pull-request@master
+  with:
+    token: ${{ secrets.ACCESS_TOKEN }}
+    owner: "ubio"
+    repository: "my-repo"
+    message: "Update readme"
+    files: "README.md"
+    title: "My amazing PR"
+    body: "These changes will change your life!"
+    head: "my-feature"
+    base: "master"
+    draft: false
+    maintainer_can_modify: true
+```
+
+Usage (optimised):
+
+```yaml
+- name: Run
+  uses: docker://automationcloud/pull-request:latest
   with:
     token: ${{ secrets.ACCESS_TOKEN }}
     owner: "ubio"

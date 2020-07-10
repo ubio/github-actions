@@ -16,4 +16,4 @@ jobs:
         with:
           channel: "@aw"
           message: "👋 hey from slack"
-          slack_token: ${{ secrets.RSSLACK_TOKEN }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
