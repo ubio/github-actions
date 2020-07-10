@@ -1,4 +1,4 @@
-name: release
+name: Release the Actions
 
 on:
   workflow_dispatch:
@@ -22,6 +22,17 @@ jobs:
           path: ./cert-checker
           tags: latest
           tag_with_sha: true
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/slack-docker-build-success:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          name: "Github Action `cert-checker`"
+          registry: registry.hub.docker.com
+          namespace: automationcloud
+          image: cert-checker
+          tag: latest
 
   release-cert-notifier:
     runs-on: ubuntu-latest
@@ -38,6 +49,17 @@ jobs:
           path: ./cert-notifier
           tags: latest
           tag_with_sha: true
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/slack-docker-build-success:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          name: "Github Action `cert-notifier`"
+          registry: registry.hub.docker.com
+          namespace: automationcloud
+          image: cert-notifier
+          tag: latest
 
   release-pull-request:
     runs-on: ubuntu-latest
@@ -54,6 +76,17 @@ jobs:
           path: ./pull-request
           tags: latest
           tag_with_sha: true
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/slack-docker-build-success:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          name: "Github Action `pull-request`"
+          registry: registry.hub.docker.com
+          namespace: automationcloud
+          image: pull-request
+          tag: latest
 
   release-repository-dispatch:
     runs-on: ubuntu-latest
@@ -70,6 +103,17 @@ jobs:
           path: ./repository-dispatch
           tags: latest
           tag_with_sha: true
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/slack-docker-build-success:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          name: "Github Action `repository-dispatch`"
+          registry: registry.hub.docker.com
+          namespace: automationcloud
+          image: repository-dispatch
+          tag: latest
 
   release-rsslack:
     runs-on: ubuntu-latest
@@ -86,6 +130,17 @@ jobs:
           path: ./rsslack
           tags: latest
           tag_with_sha: true
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/slack-docker-build-success:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          name: "Github Action `rsslack`"
+          registry: registry.hub.docker.com
+          namespace: automationcloud
+          image: rsslack
+          tag: latest
 
   release-slack-docker-build-success:
     runs-on: ubuntu-latest
@@ -102,14 +157,14 @@ jobs:
           path: ./slack-docker-build-success
           tags: latest
           tag_with_sha: true
-      # - name: Notify Slack
-      #   if: ${{ success() }}
-      #   uses: docker://automationcloud/slack-docker-build-success:latest
-      #   with:
-      #     channel: ${{ secrets.SLACK_CHANNEL }}
-      #     slack_token: ${{ secrets.SLACK_TOKEN }}
-      #     name: "Github Action `slack-docker-build-success`"
-      #     registry: registry.hub.docker.com
-      #     namespace: automationcloud
-      #     image: slack-docker-build-success
-      #     tag: latest
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/slack-docker-build-success:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          name: "Github Action `slack-docker-build-success`"
+          registry: registry.hub.docker.com
+          namespace: automationcloud
+          image: slack-docker-build-success
+          tag: latest
