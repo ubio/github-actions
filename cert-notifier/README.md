@@ -9,7 +9,7 @@ This action takes the output of the cert checker and notifies slack of any upcom
 | warn_under_days | `true`    |         | The threshold for sending warnings to Slack
 | channel         | `true`    |         | The channel to send warnings to
 | certs           | `true`    |         | The certs to check and notifyy on - see the [cert-checker](../cert-checker)
-| slack_token     | `true`    |         | A slackk token that can post the message
+| slack_token     | `true`    |         | A slack token that can post the message
 
 
 ## Example Usage

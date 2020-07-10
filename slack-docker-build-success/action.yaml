@@ -1,0 +1,35 @@
+name: Slack Docker Build Success
+description: Send a slack message for succesful container builds
+inputs:
+  slack_token:
+    description: Your slack token
+    required: true
+  channel:
+    description: The slack channel to notify
+    required: true
+  name:
+    description: The name of your project
+    required: true
+  message:
+    description: The image registry
+    required: true
+  namespace:
+    description: The image namespace
+    required: true
+  image:
+    description: The image name
+    required: true
+  tags:
+    description: The image tag
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.slack_token }}
+    - ${{ inputs.channel }}
+    - ${{ inputs.name }}
+    - ${{ inputs.registry }}
+    - ${{ inputs.namespace }}
+    - ${{ inputs.image }}
+    - ${{ inputs.tag }}
