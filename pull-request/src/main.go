@@ -237,7 +237,7 @@ func mergePullRequest(pr *github.PullRequest) error {
 func awaitMergeableState(pr *github.PullRequest) error {
 	bo := backoff.NewExponentialBackOff()
 	bo.MaxElapsedTime = 30 * time.Second
-	bo.InitialInterval = 1 * time.Second
+	bo.InitialInterval = 3 * time.Second
 	bo.MaxInterval = 10 * time.Second
 
 	ticker := backoff.NewTicker(bo)

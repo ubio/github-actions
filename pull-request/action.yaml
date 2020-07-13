@@ -60,6 +60,7 @@ runs:
     - ${{ inputs.base }}
     - ${{ inputs.draft }}
     - ${{ inputs.maintainer_can_modify }}
+    - ${{ inputs.merge }}
 branding:
   icon: target
   color: gray-dark
