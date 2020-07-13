@@ -221,7 +221,7 @@ func mergePullRequest(pr *github.PullRequest) error {
 		return err
 	}
 	msg := "Auto merging pull request"
-	state, resp, err := client.PullRequests.Merge(context.TODO(), cfg.Owner, cfg.Repo, pr.GetNumber(), msg, nil)
+	state, resp, err := client.PullRequests.Merge(ctx, cfg.Owner, cfg.Repo, pr.GetNumber(), msg, nil)
 	if err != nil {
 		return err
 	}
@@ -244,7 +244,7 @@ func awaitMergeableState(pr *github.PullRequest) error {
 
 	for range ticker.C {
 
-		state, resp, err := client.PullRequests.Get(context.TODO(), cfg.Owner, cfg.Repo, pr.GetNumber())
+		state, resp, err := client.PullRequests.Get(ctx, cfg.Owner, cfg.Repo, pr.GetNumber())
 		if err != nil {
 			log.Printf("An error occurred talking to the GitHub API, %s\n", err.Error())
 			continue
