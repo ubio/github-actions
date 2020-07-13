@@ -38,6 +38,10 @@ inputs:
     description: Whether repo maintainers can modify the PR
     required: false
     default: true
+  merge:
+    description: Whether to auto-merge the PR once it's mergeable
+    required: false
+    default: false
 output:
   pr:
     description: A link to the PR

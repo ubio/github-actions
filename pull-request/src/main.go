@@ -7,8 +7,10 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/caarlos0/env"
+	"github.com/cenkalti/backoff/v4"
 	"github.com/google/go-github/v30/github"
 	"golang.org/x/oauth2"
 )
@@ -34,6 +36,7 @@ type config struct {
 	Body                string `env:"INPUT_BODY" envDefault:""`
 	MaintainerCanModify bool   `env:"INPUT_MAINTAINER_CAN_MODIFY" envDefault:"true"`
 	Draft               bool   `env:"INPUT_DRAFT" envDefault:"false"`
+	Merge               bool   `env:"INPUT_MERGE" envDefault:"false"`
 }
 
 func init() {
@@ -83,6 +86,13 @@ func main() {
 	log.Println("PR created:", pr.GetHTMLURL())
 
 	fmt.Println(fmt.Sprintf(`::set-output name=pr::%s`, pr.GetHTMLURL()))
+
+	if cfg.Merge {
+		if err := mergePullRequest(pr); err != nil {
+			log.Fatalf("error merging pull request, %s", err.Error())
+		}
+		log.Println("successfully merged pull request")
+	}
 }
 
 // createPR builds and creates the PR on github
@@ -204,4 +214,57 @@ func getTree(ref *github.Reference) (tree *github.Tree, err error) {
 		entries,
 	)
 	return tree, err
+}
+
+func mergePullRequest(pr *github.PullRequest) error {
+	if err = awaitMergeableState(pr); err != nil {
+		return err
+	}
+	msg := "Auto merging pull request"
+	state, resp, err := client.PullRequests.Merge(context.TODO(), cfg.Owner, cfg.Repo, pr.GetNumber(), msg, nil)
+	if err != nil {
+		return err
+	}
+	if resp == nil {
+		return fmt.Errorf("nil response received")
+	}
+	if !*state.Merged {
+		fmt.Errorf("failed to merge pull request")
+	}
+	return nil
+}
+
+func awaitMergeableState(pr *github.PullRequest) error {
+	bo := backoff.NewExponentialBackOff()
+	bo.MaxElapsedTime = 30 * time.Second
+	bo.InitialInterval = 1 * time.Second
+	bo.MaxInterval = 10 * time.Second
+
+	ticker := backoff.NewTicker(bo)
+
+	for range ticker.C {
+
+		state, resp, err := client.PullRequests.Get(context.TODO(), cfg.Owner, cfg.Repo, pr.GetNumber())
+		if err != nil {
+			log.Printf("An error occurred talking to the GitHub API, %s\n", err.Error())
+			continue
+		}
+
+		if resp == nil {
+			log.Printf("A nil response was returned by the GitHub API")
+			continue
+		}
+
+		// we could be a bit cleverer here and break
+		// early on various GetMergeableState values
+		if !state.GetMergeable() {
+			log.Println("pull request is not yet mergeable")
+			continue
+		}
+
+		ticker.Stop()
+		return nil
+	}
+
+	return fmt.Errorf("timed out waiting for PR to be mergeable")
 }
