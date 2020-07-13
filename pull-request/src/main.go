@@ -217,7 +217,7 @@ func getTree(ref *github.Reference) (tree *github.Tree, err error) {
 }
 
 func mergePullRequest(pr *github.PullRequest) error {
-	if err = awaitMergableState(pr); err != nil {
+	if err = awaitMergeableState(pr); err != nil {
 		return err
 	}
 	msg := "Auto merging pull request"
@@ -234,7 +234,7 @@ func mergePullRequest(pr *github.PullRequest) error {
 	return nil
 }
 
-func awaitMergableState(pr *github.PullRequest) error {
+func awaitMergeableState(pr *github.PullRequest) error {
 	bo := backoff.NewExponentialBackOff()
 	bo.MaxElapsedTime = 30 * time.Second
 	bo.InitialInterval = 1 * time.Second
@@ -266,5 +266,5 @@ func awaitMergableState(pr *github.PullRequest) error {
 		return nil
 	}
 
-	return fmt.Errorf("timed out waiting for PR to be mergable")
+	return fmt.Errorf("timed out waiting for PR to be mergeable")
 }
