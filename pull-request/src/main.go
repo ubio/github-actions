@@ -243,14 +243,22 @@ func awaitMergableState(pr *github.PullRequest) error {
 	ticker := backoff.NewTicker(bo)
 
 	for range ticker.C {
+
 		state, resp, err := client.PullRequests.Get(context.TODO(), cfg.Owner, cfg.Repo, pr.GetNumber())
-		if err != nil || resp == nil {
+		if err != nil {
+			log.Printf("An error occurred talking to the GitHub API, %s\n", err.Error())
+			continue
+		}
+
+		if resp == nil {
+			log.Printf("A nil response was returned by the GitHub API")
 			continue
 		}
 
 		// we could be a bit cleverer here and break
 		// early on various GetMergeableState values
 		if !state.GetMergeable() {
+			log.Println("pull request is not yet mergeable")
 			continue
 		}
 
