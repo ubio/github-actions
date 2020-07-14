@@ -1,10 +1,9 @@
 name: Release the Actions
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - master
+    tags:
+    - "v**"
 
 jobs:
   release-cert-checker:
@@ -21,7 +20,7 @@ jobs:
           repository: automationcloud/cert-checker
           path: ./cert-checker
           tags: latest
-          tag_with_sha: true
+          tag_with_ref: true
       - name: Notify Slack
         if: ${{ success() }}
         uses: docker://automationcloud/slack-docker-build-success:latest

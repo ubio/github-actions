@@ -2,6 +2,12 @@
 
 A collection of Github Actions developed by UBIO.
 
+## Releasing
+
+- Update the version in the [VERSION][.VERSION] file
+- Run `script/release`
+- Profit 🎉
+
 ## Respository Dispatch
 
 Creates a [repository dispatch](https://help.github.com/en/actions/reference/events-that-trigger-workflows#external-events-repository_dispatch) event.
