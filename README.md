@@ -4,7 +4,7 @@ A collection of Github Actions developed by UBIO.
 
 ## Releasing
 
-- Update the version in the [VERSION][./VERSION] file
+- Update the version in the [VERSION](./VERSION) file
 - Run `script/release`
 - Profit 🎉
 
