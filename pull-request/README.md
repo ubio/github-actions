@@ -21,6 +21,13 @@ The PR author is set to the owner of the access token.
 | maintainer_can_modify | `false`   | `true`  | Whether repo maintainers can modify the PR
 | merge                 | `false`   | `false` | Whether to autoamtically merge the PR (if mergeable)
 
+## Outputs
+
+| Output  | Description
+| ------- | ----------- 
+| pr      | The URL to the created Pull Request
+| merged  | true/false indicating whether the Pull Request was merged after creation
+
 ## Example Usage
 
 Usage (build action):
