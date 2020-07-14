@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+
+test -z "${DEBUG:-}" || {
+    set -x
+}
+
+tag=$(cat VERSION)
+git commit --allow-empty -m "Release v${tag}"
+git tag "v${tag}"
+git push --tags
+git push
