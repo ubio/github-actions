@@ -19,6 +19,7 @@ The PR author is set to the owner of the access token.
 | base                  | `true`    |         | Name of branch where changes should be pulled into
 | draft                 | `false`   | `false` | Whether the PR is in draft status
 | maintainer_can_modify | `false`   | `true`  | Whether repo maintainers can modify the PR
+| merge                 | `false`   | `false` | Whether to autoamtically merge the PR (if mergeable)
 
 ## Example Usage
 
