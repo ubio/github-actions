@@ -89,8 +89,10 @@ func main() {
 
 	if cfg.Merge {
 		if err := mergePullRequest(pr); err != nil {
+			fmt.Println("::set-output name=merged::false")
 			log.Fatalf("error merging pull request, %s", err.Error())
 		}
+		fmt.Println("::set-output name=merged::true")
 		log.Println("successfully merged pull request")
 	}
 }

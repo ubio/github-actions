@@ -45,6 +45,9 @@ inputs:
 output:
   pr:
     description: A link to the PR
+output:
+  merged:
+    description: Whether or not the generated PR was merged
 runs:
   using: "docker"
   image: "Dockerfile"
