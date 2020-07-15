@@ -1,4 +1,5 @@
 #!/bin/sh -l
 
-result=$(/go/bin/cert $@)
+args="${INPUT_CMD:-$*}"
+result=$(/go/bin/cert $args)
 echo "::set-output name=result::$result"
