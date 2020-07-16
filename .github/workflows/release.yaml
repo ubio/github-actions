@@ -3,7 +3,7 @@ name: Release the Actions
 on:
   push:
     tags:
-    - "v**"
+      - "v**"
 
 jobs:
   release-cert-checker:
@@ -166,4 +166,31 @@ jobs:
           registry: registry.hub.docker.com
           namespace: automationcloud
           image: slack-docker-build-success
+          tag: latest
+
+  release-webhook:
+    runs-on: ubuntu-latest
+    name: release-webhook
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      - name: release webhook
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: automationcloud/webhook
+          path: ./webhook
+          tags: latest
+          tag_with_sha: true
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/webhook:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          name: "Github Action `webhook`"
+          registry: registry.hub.docker.com
+          namespace: automationcloud
+          image: webhook
           tag: latest
