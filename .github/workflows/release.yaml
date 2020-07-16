@@ -185,7 +185,7 @@ jobs:
           tag_with_sha: true
       - name: Notify Slack
         if: ${{ success() }}
-        uses: docker://automationcloud/webhook:latest
+        uses: docker://automationcloud/slack-docker-build-success:latest
         with:
           channel: ${{ secrets.SLACK_CHANNEL }}
           slack_token: ${{ secrets.SLACK_TOKEN }}
