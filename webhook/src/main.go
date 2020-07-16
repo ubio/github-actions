@@ -43,12 +43,12 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	log.Println("::set-output name=status::", string(resp.StatusCode))
+	log.Printf("::set-output name=status::%d\n", resp.StatusCode)
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println("::set-output name=body::", string(bodyBytes))
+	log.Printf("::set-output name=body::%s\n", string(bodyBytes))
 }
