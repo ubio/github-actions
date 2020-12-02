@@ -42,6 +42,9 @@ inputs:
     description: Whether to auto-merge the PR once it's mergeable
     required: false
     default: false
+  labels:
+    description: A comma delimited list of labels to add to the PR
+    required: false
 output:
   pr:
     description: A link to the PR
@@ -64,6 +67,7 @@ runs:
     - ${{ inputs.draft }}
     - ${{ inputs.maintainer_can_modify }}
     - ${{ inputs.merge }}
+    - ${{ inputs.labels }}
 branding:
   icon: target
   color: gray-dark

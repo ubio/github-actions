@@ -20,6 +20,7 @@ The PR author is set to the owner of the access token.
 | draft                 | `false`   | `false` | Whether the PR is in draft status
 | maintainer_can_modify | `false`   | `true`  | Whether repo maintainers can modify the PR
 | merge                 | `false`   | `false` | Whether to automatically merge the PR (if mergeable)
+| labels                | `false`   |         | A comma delimited list of labels to add to the PR
 
 ## Outputs
 
