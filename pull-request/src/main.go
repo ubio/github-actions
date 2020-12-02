@@ -30,14 +30,13 @@ type config struct {
 	Files   string `env:"INPUT_FILES,required"`
 
 	// PR Vars
-	Title               string   `env:"INPUT_TITLE,required"`
-	Head                string   `env:"INPUT_HEAD,required"`
-	Base                string   `env:"INPUT_BASE,required"`
-	Body                string   `env:"INPUT_BODY" envDefault:""`
-	MaintainerCanModify bool     `env:"INPUT_MAINTAINER_CAN_MODIFY" envDefault:"true"`
-	Draft               bool     `env:"INPUT_DRAFT" envDefault:"false"`
-	Merge               bool     `env:"INPUT_MERGE" envDefault:"false"`
-	Labels              []string `env:"INPUT_LABELS" envDefault:""`
+	Title               string `env:"INPUT_TITLE,required"`
+	Head                string `env:"INPUT_HEAD,required"`
+	Base                string `env:"INPUT_BASE,required"`
+	Body                string `env:"INPUT_BODY" envDefault:""`
+	MaintainerCanModify bool   `env:"INPUT_MAINTAINER_CAN_MODIFY" envDefault:"true"`
+	Draft               bool   `env:"INPUT_DRAFT" envDefault:"false"`
+	Merge               bool   `env:"INPUT_MERGE" envDefault:"false"`
 }
 
 func init() {
@@ -86,10 +85,6 @@ func main() {
 	}
 	log.Println("PR created:", pr.GetHTMLURL())
 
-	if err := addLabelsToPR(cfg.Labels, pr); err != nil {
-		log.Fatalf("Error while adding labels to the pull request: %s", err)
-	}
-
 	fmt.Println(fmt.Sprintf(`::set-output name=pr::%s`, pr.GetHTMLURL()))
 
 	if cfg.Merge {
@@ -100,11 +95,6 @@ func main() {
 		fmt.Println("::set-output name=merged::true")
 		log.Println("successfully merged pull request")
 	}
-}
-
-func addLabelsToPR(labels []string, pr *github.PullRequest) error {
-	_, _, err := client.Issues.AddLabelsToIssue(ctx, cfg.Owner, cfg.Repo, pr.GetNumber(), labels)
-	return err
 }
 
 // createPR builds and creates the PR on github
