@@ -1,0 +1,24 @@
+name: Webhook
+description: Send a webhook to a URL
+inputs:
+  url:
+    description: The target URL
+    required: true
+  body:
+    description: The message body
+    required: true
+  secret:
+    description: A secret to send in the header to verify originator
+    required: false
+outputs:
+  status:
+    description: "The status code of the response"
+  body:
+    description: "The body of the response"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.url }}
+    - ${{ inputs.body }}
+    - ${{ inputs.secret }}
