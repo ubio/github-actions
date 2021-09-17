@@ -195,7 +195,7 @@ jobs:
           image: webhook
           tag: latest
 
-  release-webhook:
+  release-slack-discussion:
     runs-on: ubuntu-latest
     name: release-slack-discussion
     steps:
