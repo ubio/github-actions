@@ -8,11 +8,6 @@ Sends a notification to slack for a new discussion topic in a squad repo.
 | --------------- | --------- | ------- | -----------
 | slack_token     | `true`    |         | A slack token that can post the message
 | channel         | `true`    |         | The channel to send the message to
-| squad           | `true`    |         | The name of the squad
-| registry        | `true`    |         | The registry name - eg `registry.hub.docker.com`
-| namespace       | `true`    |         | The registry namespace - eg `automationcloud`
-| image           | `true`    |         | The image name - eg `my-project`
-| tag             | `true`    |         | The image tag - eg `27.8.1-rc1`
 
 ## Usage:
 
