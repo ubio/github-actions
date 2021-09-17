@@ -63,7 +63,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	discussion := Discussion{}
+	discussion := DiscussionEvent{}
 	err = json.Unmarshal(content, &discussion)
 	if err != nil {
 		log.Fatal(err)
