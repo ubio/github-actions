@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"log"
 	"os"
@@ -8,8 +9,6 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/kelseyhightower/envconfig"
 )
-
-const template = ":package: *%s* has been built and pushed to `%s/%s/%s:%s`"
 
 var (
 	vars EnvVars
@@ -54,8 +53,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println("Event Path", vars.EventPath)
-
 	file, err := os.Open(vars.EventPath)
 	if err != nil {
 		log.Fatal(err)
@@ -66,7 +63,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	spew.Dump(content)
+	discussion := Discussion{}
+	err = json.Unmarshal(content, &discussion)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	spew.Dump(discussion)
 
 	// msg := fmt.Sprintf(template)
 
