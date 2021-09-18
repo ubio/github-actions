@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/eritikass/githubmarkdownconvertergo"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/slack-go/slack"
@@ -30,6 +31,7 @@ type DiscussionEvent struct {
 }
 
 type Discussion struct {
+	ID        string    `json:"id,omitempty"`
 	Title     string    `json:"title,omitempty"`
 	Body      string    `json:"body,omitempty"`
 	CreatedAt string    `json:"created_at,omitempty"`
@@ -73,13 +75,15 @@ func main() {
 		log.Fatal(err)
 	}
 
+	spew.Dump(buildSlackBlock(event.Discussion)...)
+
 	api := slack.New(vars.Token)
 	channelID, timestamp, err := api.PostMessage(
 		vars.Channel,
 		slack.MsgOptionBlocks(buildSlackBlock(event.Discussion)...),
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Message failed to send:", err)
 	}
 
 	log.Printf("Message successfully sent to channel %s at %s", channelID, timestamp)
@@ -106,7 +110,7 @@ func buildSlackBlock(d *Discussion) []slack.Block {
 	contextHeaderText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("%s %s - *%s*\n%s @ %s by <%s|%s>", d.Category.Emoji, squadName, d.Category.Name, day, tod, d.User.HTMLURL, d.User.Login), false, false)
 
 	buttonText := slack.NewTextBlockObject("plaintext", "View Discussion", false, false)
-	button := slack.NewButtonBlockElement("discussion-link", d.HTMLURL, buttonText)
+	button := slack.NewButtonBlockElement(fmt.Sprintf("discussion-link-%s", d.ID), d.HTMLURL, buttonText)
 	linkAccessory := slack.NewAccessory(button)
 
 	contextSection := slack.NewSectionBlock(contextHeaderText, nil, linkAccessory)
