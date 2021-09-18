@@ -6,194 +6,194 @@ on:
       - "v**"
 
 jobs:
-  release-cert-checker:
-    runs-on: ubuntu-latest
-    name: release-cert-checker
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-      - name: release cert-checker
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: automationcloud/cert-checker
-          path: ./cert-checker
-          tags: latest
-          tag_with_ref: true
-      - name: Notify Slack
-        if: ${{ success() }}
-        uses: docker://automationcloud/slack-docker-build-success:latest
-        with:
-          channel: ${{ secrets.SLACK_CHANNEL }}
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          name: "Github Action `cert-checker`"
-          registry: registry.hub.docker.com
-          namespace: automationcloud
-          image: cert-checker
-          tag: latest
+  # release-cert-checker:
+  #   runs-on: ubuntu-latest
+  #   name: release-cert-checker
+  #   steps:
+  #     - name: checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: release cert-checker
+  #       uses: docker/build-push-action@v1
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
+  #         repository: automationcloud/cert-checker
+  #         path: ./cert-checker
+  #         tags: latest
+  #         tag_with_ref: true
+  #     - name: Notify Slack
+  #       if: ${{ success() }}
+  #       uses: docker://automationcloud/slack-docker-build-success:latest
+  #       with:
+  #         channel: ${{ secrets.SLACK_CHANNEL }}
+  #         slack_token: ${{ secrets.SLACK_TOKEN }}
+  #         name: "Github Action `cert-checker`"
+  #         registry: registry.hub.docker.com
+  #         namespace: automationcloud
+  #         image: cert-checker
+  #         tag: latest
 
-  release-cert-notifier:
-    runs-on: ubuntu-latest
-    name: release-cert-notifier
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-      - name: release cert-notifier
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: automationcloud/cert-notifier
-          path: ./cert-notifier
-          tags: latest
-          tag_with_sha: true
-      - name: Notify Slack
-        if: ${{ success() }}
-        uses: docker://automationcloud/slack-docker-build-success:latest
-        with:
-          channel: ${{ secrets.SLACK_CHANNEL }}
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          name: "Github Action `cert-notifier`"
-          registry: registry.hub.docker.com
-          namespace: automationcloud
-          image: cert-notifier
-          tag: latest
+  # release-cert-notifier:
+  #   runs-on: ubuntu-latest
+  #   name: release-cert-notifier
+  #   steps:
+  #     - name: checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: release cert-notifier
+  #       uses: docker/build-push-action@v1
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
+  #         repository: automationcloud/cert-notifier
+  #         path: ./cert-notifier
+  #         tags: latest
+  #         tag_with_sha: true
+  #     - name: Notify Slack
+  #       if: ${{ success() }}
+  #       uses: docker://automationcloud/slack-docker-build-success:latest
+  #       with:
+  #         channel: ${{ secrets.SLACK_CHANNEL }}
+  #         slack_token: ${{ secrets.SLACK_TOKEN }}
+  #         name: "Github Action `cert-notifier`"
+  #         registry: registry.hub.docker.com
+  #         namespace: automationcloud
+  #         image: cert-notifier
+  #         tag: latest
 
-  release-pull-request:
-    runs-on: ubuntu-latest
-    name: release-pull-request
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-      - name: release pull-request
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: automationcloud/pull-request
-          path: ./pull-request
-          tags: latest
-          tag_with_sha: true
-      - name: Notify Slack
-        if: ${{ success() }}
-        uses: docker://automationcloud/slack-docker-build-success:latest
-        with:
-          channel: ${{ secrets.SLACK_CHANNEL }}
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          name: "Github Action `pull-request`"
-          registry: registry.hub.docker.com
-          namespace: automationcloud
-          image: pull-request
-          tag: latest
+  # release-pull-request:
+  #   runs-on: ubuntu-latest
+  #   name: release-pull-request
+  #   steps:
+  #     - name: checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: release pull-request
+  #       uses: docker/build-push-action@v1
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
+  #         repository: automationcloud/pull-request
+  #         path: ./pull-request
+  #         tags: latest
+  #         tag_with_sha: true
+  #     - name: Notify Slack
+  #       if: ${{ success() }}
+  #       uses: docker://automationcloud/slack-docker-build-success:latest
+  #       with:
+  #         channel: ${{ secrets.SLACK_CHANNEL }}
+  #         slack_token: ${{ secrets.SLACK_TOKEN }}
+  #         name: "Github Action `pull-request`"
+  #         registry: registry.hub.docker.com
+  #         namespace: automationcloud
+  #         image: pull-request
+  #         tag: latest
 
-  release-repository-dispatch:
-    runs-on: ubuntu-latest
-    name: release-repository-dispatch
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-      - name: release repository-dispatch
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: automationcloud/repository-dispatch
-          path: ./repository-dispatch
-          tags: latest
-          tag_with_sha: true
-      - name: Notify Slack
-        if: ${{ success() }}
-        uses: docker://automationcloud/slack-docker-build-success:latest
-        with:
-          channel: ${{ secrets.SLACK_CHANNEL }}
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          name: "Github Action `repository-dispatch`"
-          registry: registry.hub.docker.com
-          namespace: automationcloud
-          image: repository-dispatch
-          tag: latest
+  # release-repository-dispatch:
+  #   runs-on: ubuntu-latest
+  #   name: release-repository-dispatch
+  #   steps:
+  #     - name: checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: release repository-dispatch
+  #       uses: docker/build-push-action@v1
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
+  #         repository: automationcloud/repository-dispatch
+  #         path: ./repository-dispatch
+  #         tags: latest
+  #         tag_with_sha: true
+  #     - name: Notify Slack
+  #       if: ${{ success() }}
+  #       uses: docker://automationcloud/slack-docker-build-success:latest
+  #       with:
+  #         channel: ${{ secrets.SLACK_CHANNEL }}
+  #         slack_token: ${{ secrets.SLACK_TOKEN }}
+  #         name: "Github Action `repository-dispatch`"
+  #         registry: registry.hub.docker.com
+  #         namespace: automationcloud
+  #         image: repository-dispatch
+  #         tag: latest
 
-  release-rsslack:
-    runs-on: ubuntu-latest
-    name: release-rsslack
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-      - name: release rsslack
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: automationcloud/rsslack
-          path: ./rsslack
-          tags: latest
-          tag_with_sha: true
-      - name: Notify Slack
-        if: ${{ success() }}
-        uses: docker://automationcloud/slack-docker-build-success:latest
-        with:
-          channel: ${{ secrets.SLACK_CHANNEL }}
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          name: "Github Action `rsslack`"
-          registry: registry.hub.docker.com
-          namespace: automationcloud
-          image: rsslack
-          tag: latest
+  # release-rsslack:
+  #   runs-on: ubuntu-latest
+  #   name: release-rsslack
+  #   steps:
+  #     - name: checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: release rsslack
+  #       uses: docker/build-push-action@v1
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
+  #         repository: automationcloud/rsslack
+  #         path: ./rsslack
+  #         tags: latest
+  #         tag_with_sha: true
+  #     - name: Notify Slack
+  #       if: ${{ success() }}
+  #       uses: docker://automationcloud/slack-docker-build-success:latest
+  #       with:
+  #         channel: ${{ secrets.SLACK_CHANNEL }}
+  #         slack_token: ${{ secrets.SLACK_TOKEN }}
+  #         name: "Github Action `rsslack`"
+  #         registry: registry.hub.docker.com
+  #         namespace: automationcloud
+  #         image: rsslack
+  #         tag: latest
 
-  release-slack-docker-build-success:
-    runs-on: ubuntu-latest
-    name: release-slack-docker-build-success
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-      - name: release slack docker build success
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: automationcloud/slack-docker-build-success
-          path: ./slack-docker-build-success
-          tags: latest
-          tag_with_sha: true
-      - name: Notify Slack
-        if: ${{ success() }}
-        uses: docker://automationcloud/slack-docker-build-success:latest
-        with:
-          channel: ${{ secrets.SLACK_CHANNEL }}
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          name: "Github Action `slack-docker-build-success`"
-          registry: registry.hub.docker.com
-          namespace: automationcloud
-          image: slack-docker-build-success
-          tag: latest
+  # release-slack-docker-build-success:
+  #   runs-on: ubuntu-latest
+  #   name: release-slack-docker-build-success
+  #   steps:
+  #     - name: checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: release slack docker build success
+  #       uses: docker/build-push-action@v1
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
+  #         repository: automationcloud/slack-docker-build-success
+  #         path: ./slack-docker-build-success
+  #         tags: latest
+  #         tag_with_sha: true
+  #     - name: Notify Slack
+  #       if: ${{ success() }}
+  #       uses: docker://automationcloud/slack-docker-build-success:latest
+  #       with:
+  #         channel: ${{ secrets.SLACK_CHANNEL }}
+  #         slack_token: ${{ secrets.SLACK_TOKEN }}
+  #         name: "Github Action `slack-docker-build-success`"
+  #         registry: registry.hub.docker.com
+  #         namespace: automationcloud
+  #         image: slack-docker-build-success
+  #         tag: latest
 
-  release-webhook:
-    runs-on: ubuntu-latest
-    name: release-webhook
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-      - name: release webhook
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: automationcloud/webhook
-          path: ./webhook
-          tags: latest
-          tag_with_sha: true
-      - name: Notify Slack
-        if: ${{ success() }}
-        uses: docker://automationcloud/slack-docker-build-success:latest
-        with:
-          channel: ${{ secrets.SLACK_CHANNEL }}
-          slack_token: ${{ secrets.SLACK_TOKEN }}
-          name: "Github Action `webhook`"
-          registry: registry.hub.docker.com
-          namespace: automationcloud
-          image: webhook
-          tag: latest
+  # release-webhook:
+  #   runs-on: ubuntu-latest
+  #   name: release-webhook
+  #   steps:
+  #     - name: checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: release webhook
+  #       uses: docker/build-push-action@v1
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
+  #         repository: automationcloud/webhook
+  #         path: ./webhook
+  #         tags: latest
+  #         tag_with_sha: true
+  #     - name: Notify Slack
+  #       if: ${{ success() }}
+  #       uses: docker://automationcloud/slack-docker-build-success:latest
+  #       with:
+  #         channel: ${{ secrets.SLACK_CHANNEL }}
+  #         slack_token: ${{ secrets.SLACK_TOKEN }}
+  #         name: "Github Action `webhook`"
+  #         registry: registry.hub.docker.com
+  #         namespace: automationcloud
+  #         image: webhook
+  #         tag: latest
 
   release-slack-discussion:
     runs-on: ubuntu-latest
