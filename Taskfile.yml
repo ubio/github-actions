@@ -1,0 +1,13 @@
+version: "3"
+
+tasks:
+  deps:
+    desc: Update dependencies
+    silent: true
+    cmds:
+      - gazelle update-repos --from_file=go.mod -to_macro=go_third_party.bzl%go_deps
+  run:
+    desc: Run Gazelle
+    silent: false
+    cmds:
+      - bazel run //:gazelle
