@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 
+	"githubmarkdownconvertergo"
+
 	"github.com/kelseyhightower/envconfig"
 	"github.com/slack-go/slack"
 )
@@ -111,16 +113,16 @@ func buildSlackBlock(d *Discussion) slack.MsgOption {
 
 	// contextSection := slack.NewSectionBlock(contextHeaderText, nil, linkAccessory)
 
-	// headerText := slack.NewTextBlockObject("mrkdwn", d.Title, false, false)
-	// headerSection := slack.NewSectionBlock(headerText, nil, nil)
+	headerText := slack.NewTextBlockObject("mrkdwn", d.Title, false, false)
+	headerSection := slack.NewSectionBlock(headerText, nil, nil)
 
-	// bodyText := slack.NewTextBlockObject("mrkdwn", githubmarkdownconvertergo.Slack(d.Body), false, false)
-	// bodySection := slack.NewSectionBlock(bodyText, nil, nil)
+	bodyText := slack.NewTextBlockObject("mrkdwn", githubmarkdownconvertergo.Slack(d.Body), false, false)
+	bodySection := slack.NewSectionBlock(bodyText, nil, nil)
 
 	return slack.MsgOptionBlocks(
 		// contextSection,
 		dividerSection,
-		// headerSection,
-		// bodySection,
+		headerSection,
+		bodySection,
 	)
 }
