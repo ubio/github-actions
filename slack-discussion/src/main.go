@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"githubmarkdownconvertergo"
+	"github.com/eritikass/githubmarkdownconvertergo"
 
 	"github.com/kelseyhightower/envconfig"
 	"github.com/slack-go/slack"
