@@ -96,7 +96,6 @@ func buildSlackBlock(d *Discussion) slack.MsgOption {
 
 	dividerSection := slack.NewDividerBlock()
 
-	// @TODO: get the squad name from the event
 	squadName := getSquadNameFromRepoName(d.Repository.Name)
 
 	viewDiscussionText := "View Discussion"
