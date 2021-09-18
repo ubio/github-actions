@@ -95,11 +95,11 @@ func buildSlackBlock(d *Discussion) slack.MsgOption {
 
 	viewDiscussionText := "View Discussion"
 
-	headerText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("%s _%s_ - *%s*", d.Category.Emoji, squadName, d.Category.Name), false, false)
+	headerText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("%s - *%s* %s ", squadName, d.Category.Name, d.Category.Emoji), false, false)
 	headerSection := slack.NewSectionBlock(headerText, nil, nil)
 
 	titleText := slack.NewTextBlockObject("mrkdwn", d.Title, false, false)
-	titleSection := slack.NewSectionBlock(titleText, nil, nil)
+	titleSection := slack.NewHeaderBlock(titleText, nil, nil)
 
 	bodyText := slack.NewTextBlockObject("mrkdwn", githubmarkdownconvertergo.Slack(d.Body), false, false)
 	bodySection := slack.NewSectionBlock(bodyText, nil, nil)
