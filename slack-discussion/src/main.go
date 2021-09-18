@@ -2,12 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
-	"github.com/davecgh/go-spew/spew"
+	"github.com/eritikass/githubmarkdownconvertergo"
 	"github.com/kelseyhightower/envconfig"
+	"github.com/slack-go/slack"
 )
 
 var (
@@ -44,6 +47,7 @@ type Category struct {
 type User struct {
 	AvatarURL string `json:"avatar_url,omitempty"`
 	HTMLURL   string `json:"html_url,omitempty"`
+	Login     string `json:"login,omitempty"`
 }
 
 func main() {
@@ -63,21 +67,60 @@ func main() {
 		log.Fatal(err)
 	}
 
-	discussion := DiscussionEvent{}
-	err = json.Unmarshal(content, &discussion)
+	event := DiscussionEvent{}
+	err = json.Unmarshal(content, &event)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	spew.Dump(discussion)
+	api := slack.New(vars.Token)
+	channelID, timestamp, err := api.PostMessage(
+		vars.Channel,
+		slack.MsgOptionText(buildSlackBlock(event.Discussion), true),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// msg := fmt.Sprintf(template)
+	log.Printf("Message successfully sent to channel %s at %s", channelID, timestamp)
+}
 
-	// api := slack.New(vars.Token)
-	// channelID, timestamp, err := api.PostMessage(vars.Channel, slack.MsgOptionText(msg, false))
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+func buildSlackBlock(d *Discussion) slack.Message {
 
-	// log.Printf("Message sent to channel %s at %s", channelID, timestamp)
+	dividerSection := slack.NewDividerBlock()
+
+	// @TODO: get the squad name from the event
+	squadName := "Proxies Squad"
+
+	date, err := time.Parse(
+		time.RFC3339,
+		d.CreatedAt,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	day := date.Format("Mon, Jan 2")
+	tod := date.Format("03:04")
+
+	contextHeaderText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("%s %s - *%s*\n%s @ %s by <%s|%s>", d.Category.Emoji, squadName, d.Category.Name, day, tod, d.User.HTMLURL, d.User.Login), false, false)
+
+	buttonText := slack.NewTextBlockObject("plaintext", "View Discussion", false, false)
+	button := slack.NewButtonBlockElement("discussion-link", d.HTMLURL, buttonText)
+	linkAccessory := slack.NewAccessory(button)
+
+	contextSection := slack.NewSectionBlock(contextHeaderText, nil, linkAccessory)
+
+	headerText := slack.NewTextBlockObject("mrkdwn", d.Title, false, false)
+	headerSection := slack.NewSectionBlock(headerText, nil, nil)
+
+	bodyText := slack.NewTextBlockObject("mrkdwn", githubmarkdownconvertergo.Slack(d.Body), false, false)
+	bodySection := slack.NewSectionBlock(bodyText, nil, nil)
+
+	return slack.NewBlockMessage(
+		contextSection,
+		dividerSection,
+		headerSection,
+		bodySection,
+	)
 }
