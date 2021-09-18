@@ -28,17 +28,17 @@ type EnvVars struct {
 
 type DiscussionEvent struct {
 	Discussion *Discussion `json:"discussion,omitempty"`
+	Repository *Repository `json:"repository,omitempty"`
 }
 
 type Discussion struct {
-	ID         int         `json:"id,omitempty"`
-	Title      string      `json:"title,omitempty"`
-	Body       string      `json:"body,omitempty"`
-	CreatedAt  string      `json:"created_at,omitempty"`
-	HTMLURL    string      `json:"html_url,omitempty"`
-	Category   *Category   `json:"category,omitempty"`
-	User       *User       `json:"user,omitempty"`
-	Repository *Repository `json:"repository,omitempty"`
+	ID        int       `json:"id,omitempty"`
+	Title     string    `json:"title,omitempty"`
+	Body      string    `json:"body,omitempty"`
+	CreatedAt string    `json:"created_at,omitempty"`
+	HTMLURL   string    `json:"html_url,omitempty"`
+	Category  *Category `json:"category,omitempty"`
+	User      *User     `json:"user,omitempty"`
 }
 
 type Repository struct {
