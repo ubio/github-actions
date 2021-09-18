@@ -86,7 +86,7 @@ func main() {
 	log.Printf("message successfully sent to channel %s at %s", channelID, timestamp)
 }
 
-func buildSlackBlock(d *Discussion) slack.MsgOptionBlocks {
+func buildSlackBlock(d *Discussion) slack.MsgOption {
 
 	dividerSection := slack.NewDividerBlock()
 
@@ -120,11 +120,10 @@ func buildSlackBlock(d *Discussion) slack.MsgOptionBlocks {
 	bodyText := slack.NewTextBlockObject("mrkdwn", githubmarkdownconvertergo.Slack(d.Body), false, false)
 	bodySection := slack.NewSectionBlock(bodyText, nil, nil)
 
-	return slack.MsgOptionBlocks{
+	return slack.MsgOptionBlocks(
 		contextSection,
 		dividerSection,
 		headerSection,
 		bodySection,
-	}
-
+	)
 }
