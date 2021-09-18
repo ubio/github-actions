@@ -99,7 +99,7 @@ func buildSlackBlock(d *Discussion) slack.MsgOption {
 	headerSection := slack.NewSectionBlock(headerText, nil, nil)
 
 	titleText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*%s*", d.Title), false, false)
-	titleSection := slack.NewSectionBlock(titleText)
+	titleSection := slack.NewSectionBlock(titleText, nil, nil)
 
 	bodyText := slack.NewTextBlockObject("mrkdwn", githubmarkdownconvertergo.Slack(d.Body), false, false)
 	bodySection := slack.NewSectionBlock(bodyText, nil, nil)
