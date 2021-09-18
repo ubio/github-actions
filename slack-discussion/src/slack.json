@@ -3,23 +3,9 @@
 		{
 			"type": "section",
 			"text": {
-				"text": ":speech_balloon: Proxies Squad - *General*\nNovember 12, 2019 @ 22:37 from <https://github.com/andrew-waters|@andrew-waters>",
+				"text": ":speech_balloon: General - *Proxies Squad*",
 				"type": "mrkdwn"
-			},
-			"accessory": {
-				"type": "button",
-				"text": {
-					"type": "plain_text",
-					"text": "View Discussion",
-					"emoji": true
-				},
-				"value": "https://github.com/ubio/squad-proxies/discussions/11",
-				"url": "https://github.com/ubio/squad-proxies/discussions/11",
-				"action_id": "button-action"
 			}
-		},
-		{
-			"type": "divider"
 		},
 		{
 			"type": "header",
@@ -34,6 +20,31 @@
 				"type": "mrkdwn",
 				"text": "hi friends"
 			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "image",
+					"image_url": "https://avatars1.githubusercontent.com/u/21031067?v=4",
+					"alt_text": "cute cat"
+				},
+				{
+					"type": "mrkdwn",
+					"text": "Author: <https://github.com/andrew-waters|@andrew-waters>"
+				},
+				{
+					"type": "mrkdwn",
+					"text": "November 12, 2019 @ 22:37"
+				},
+				{
+					"type": "mrkdwn",
+					"text": "<https://github.com/andrew-waters|View Discussion>"
+				}
+			]
 		}
 	]
 }

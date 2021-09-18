@@ -94,7 +94,7 @@ func buildSlackBlock(d *Discussion) slack.MsgOption {
 	// @TODO: get the squad name from the event
 	squadName := "Proxies Squad"
 
-	// viewDiscussionText := "View Discussion"
+	viewDiscussionText := "View Discussion"
 
 	date, err := time.Parse(
 		time.RFC3339,
@@ -107,25 +107,27 @@ func buildSlackBlock(d *Discussion) slack.MsgOption {
 	day := date.Format("Mon, Jan 2")
 	tod := date.Format("15:04")
 
-	contextHeaderText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("%s *%s* - _%s_\n%s %s by <%s|%s>", d.Category.Emoji, squadName, d.Category.Name, day, tod, d.User.HTMLURL, d.User.Login), false, false)
-
-	// buttonText := slack.NewTextBlockObject("plaintext", viewDiscussionText, false, false)
-	// button := slack.NewButtonBlockElement(fmt.Sprintf("discussion-link-%d", d.ID), d.HTMLURL, buttonText)
-	// linkAccessory := slack.NewAccessory(button)
-
-	// contextSection := slack.NewSectionBlock(contextHeaderText, nil, linkAccessory, nil)
-	contextSection := slack.NewSectionBlock(contextHeaderText, nil, nil)
-
-	headerText := slack.NewTextBlockObject("mrkdwn", d.Title, false, false)
+	headerText := slack.NewTextBlockObject("plain_text", fmt.Sprintf("%s _%s_ - *%s*", d.Category.Emoji, squadName, d.Category.Name), false, false)
+	// contextHeaderText := slack.NewTextBlockObject("plain_text", fmt.Sprintf("%s *%s* - _%s_\n%s %s by <%s|%s>", d.Category.Emoji, squadName, d.Category.Name, day, tod, d.User.HTMLURL, d.User.Login), false, false)
 	headerSection := slack.NewSectionBlock(headerText, nil, nil)
+
+	titleText := slack.NewTextBlockObject("mrkdwn", d.Title, false, false)
+	titleSection := slack.NewSectionBlock(titleText, nil, nil)
 
 	bodyText := slack.NewTextBlockObject("mrkdwn", githubmarkdownconvertergo.Slack(d.Body), false, false)
 	bodySection := slack.NewSectionBlock(bodyText, nil, nil)
 
+	contextImage := slack.NewImageBlockElement(d.User.AvatarURL, d.User.Login)
+	contextTextAuthor := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("Author: <%s|%s>", d.User.HTMLURL, d.User.Login), false, false)
+	contextTextTime := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("%s @ %s", day, tod), false, false)
+	contextTextLink := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("<%s|%s>", d.HTMLURL, viewDiscussionText), false, false)
+	contextSection := slack.NewContextBlock("", []slack.MixedElement{contextImage, contextTextAuthor, contextTextTime, contextTextLink}...)
+
 	return slack.MsgOptionBlocks(
-		contextSection,
-		dividerSection,
 		headerSection,
+		titleSection,
 		bodySection,
+		dividerSection,
+		contextSection,
 	)
 }
