@@ -216,7 +216,7 @@ jobs:
         with:
           channel: ${{ secrets.SLACK_CHANNEL }}
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          name: "Github Action `webhook`"
+          name: "Github Action `slack-discussion`"
           registry: registry.hub.docker.com
           namespace: automationcloud
           image: slack-discussion
