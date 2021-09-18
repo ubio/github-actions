@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/eritikass/githubmarkdownconvertergo"
 
@@ -30,13 +31,18 @@ type DiscussionEvent struct {
 }
 
 type Discussion struct {
-	ID        int       `json:"id,omitempty"`
-	Title     string    `json:"title,omitempty"`
-	Body      string    `json:"body,omitempty"`
-	CreatedAt string    `json:"created_at,omitempty"`
-	HTMLURL   string    `json:"html_url,omitempty"`
-	Category  *Category `json:"category,omitempty"`
-	User      *User     `json:"user,omitempty"`
+	ID         int         `json:"id,omitempty"`
+	Title      string      `json:"title,omitempty"`
+	Body       string      `json:"body,omitempty"`
+	CreatedAt  string      `json:"created_at,omitempty"`
+	HTMLURL    string      `json:"html_url,omitempty"`
+	Category   *Category   `json:"category,omitempty"`
+	User       *User       `json:"user,omitempty"`
+	Repository *Repository `json:"repository,omitempty"`
+}
+
+type Repository struct {
+	Name string `json:"name"`
 }
 
 type Category struct {
@@ -91,7 +97,7 @@ func buildSlackBlock(d *Discussion) slack.MsgOption {
 	dividerSection := slack.NewDividerBlock()
 
 	// @TODO: get the squad name from the event
-	squadName := "Proxies Squad"
+	squadName := getSquadNameFromRepoName(d.Repository.Name)
 
 	viewDiscussionText := "View Discussion"
 
@@ -115,4 +121,16 @@ func buildSlackBlock(d *Discussion) slack.MsgOption {
 		dividerSection,
 		contextSection,
 	)
+}
+
+func getSquadNameFromRepoName(repoName string) string {
+	p := strings.Split(repoName, "-")
+	squad := p[2:]
+	squadParts := make([]string, len(squad))
+	for _, p := range squad {
+		squadParts = append(squadParts, strings.Title(p))
+	}
+	squadName := strings.Join(squadParts, " ")
+
+	return squadName
 }
