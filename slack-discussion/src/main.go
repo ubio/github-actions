@@ -83,7 +83,7 @@ func main() {
 	api := slack.New(vars.Token)
 	channelID, timestamp, err := api.PostMessage(
 		vars.Channel,
-		buildSlackBlock(event.Discussion),
+		buildSlackBlock(&event),
 	)
 	if err != nil {
 		log.Fatal("message failed to send:", err)
@@ -92,7 +92,7 @@ func main() {
 	log.Printf("message successfully sent to channel %s at %s", channelID, timestamp)
 }
 
-func buildSlackBlock(d *Discussion) slack.MsgOption {
+func buildSlackBlock(d *DiscussionEvent) slack.MsgOption {
 
 	dividerSection := slack.NewDividerBlock()
 
@@ -100,17 +100,17 @@ func buildSlackBlock(d *Discussion) slack.MsgOption {
 
 	viewDiscussionText := "View Discussion"
 
-	headerText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("%s - *%s* %s ", squadName, d.Category.Name, d.Category.Emoji), false, false)
+	headerText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("%s - *%s* %s ", squadName, d.Discussion.Category.Name, d.Discussion.Category.Emoji), false, false)
 	headerSection := slack.NewSectionBlock(headerText, nil, nil)
 
-	titleText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*%s*", d.Title), false, false)
+	titleText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*%s*", d.Discussion.Title), false, false)
 	titleSection := slack.NewSectionBlock(titleText, nil, nil)
 
-	bodyText := slack.NewTextBlockObject("mrkdwn", githubmarkdownconvertergo.Slack(d.Body), false, false)
+	bodyText := slack.NewTextBlockObject("mrkdwn", githubmarkdownconvertergo.Slack(d.Discussion.Body), false, false)
 	bodySection := slack.NewSectionBlock(bodyText, nil, nil)
 
-	contextTextAuthor := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("Author: <%s|%s>", d.User.HTMLURL, d.User.Login), false, false)
-	contextTextLink := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("<%s|%s>", d.HTMLURL, viewDiscussionText), false, false)
+	contextTextAuthor := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("Author: <%s|%s>", d.Discussion.User.HTMLURL, d.Discussion.User.Login), false, false)
+	contextTextLink := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("<%s|%s>", d.Discussion.HTMLURL, viewDiscussionText), false, false)
 	contextSection := slack.NewContextBlock("", []slack.MixedElement{contextTextAuthor, contextTextLink}...)
 
 	return slack.MsgOptionBlocks(
