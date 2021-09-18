@@ -124,12 +124,12 @@ func buildSlackBlock(d *DiscussionEvent) slack.MsgOption {
 
 func getSquadNameFromRepoName(repoName string) string {
 	p := strings.Split(repoName, "-")
-	squad := p[2:]
+	squad := p[1:]
 	squadParts := make([]string, len(squad))
 	for _, p := range squad {
 		squadParts = append(squadParts, strings.Title(p))
 	}
 	squadName := strings.Join(squadParts, " ")
 
-	return squadName
+	return fmt.Sprintf("%s Squad", squadName)
 }
