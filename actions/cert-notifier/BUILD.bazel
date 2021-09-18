@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "cert-notifier_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/ubio/github-actions/actions/cert-notifier",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_nlopes_slack//:go_default_library"],
+)
+
+go_binary(
+    name = "cert-notifier",
+    embed = [":cert-notifier_lib"],
+    visibility = ["//visibility:public"],
+)

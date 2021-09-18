@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "pull-request_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/ubio/github-actions/actions/pull-request",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_caarlos0_env//:go_default_library",
+        "@com_github_cenkalti_backoff_v4//:go_default_library",
+        "@com_github_google_go_github_v30//github:go_default_library",
+        "@org_golang_x_oauth2//:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "pull-request",
+    embed = [":pull-request_lib"],
+    visibility = ["//visibility:public"],
+)

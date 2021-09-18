@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "slack-docker-build-success_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/ubio/github-actions/actions/slack-docker-build-success",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_kelseyhightower_envconfig//:go_default_library",
+        "@com_github_nlopes_slack//:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "slack-docker-build-success",
+    embed = [":slack-docker-build-success_lib"],
+    visibility = ["//visibility:public"],
+)

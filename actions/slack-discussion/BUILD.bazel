@@ -1,0 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "slack-discussion_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/ubio/github-actions/actions/slack-discussion",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@com_github_eritikass_githubmarkdownconvertergo//:go_default_library",
+        "@com_github_kelseyhightower_envconfig//:go_default_library",
+        "@com_github_slack_go_slack//:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "slack-discussion",
+    embed = [":slack-discussion_lib"],
+    visibility = ["//visibility:public"],
+)
