@@ -1,4 +1,4 @@
-module github.com/ubio/github-actions/slack-discussion
+module github.com/ubio/github-actions/slack-discussion/src
 
 go 1.17
 

@@ -1,7 +1,7 @@
 FROM alpine:latest as certs
 RUN apk --update add ca-certificates
 
-FROM golang:1.14-alpine3.11 as build
+FROM golang:1.17-alpine as build
 WORKDIR /go/src/github.com/ubio/github-actions/slack-docker-build-success
 RUN apk update && \
   apk upgrade && \
