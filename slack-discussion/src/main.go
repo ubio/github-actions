@@ -98,8 +98,8 @@ func buildSlackBlock(d *Discussion) slack.MsgOption {
 	headerText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("%s - *%s* %s ", squadName, d.Category.Name, d.Category.Emoji), false, false)
 	headerSection := slack.NewSectionBlock(headerText, nil, nil)
 
-	titleText := slack.NewTextBlockObject("mrkdwn", d.Title, false, false)
-	titleSection := slack.NewHeaderBlock(titleText)
+	titleText := slack.NewTextBlockObject("mrkdwn", fmt.Sprintf("*%s*", d.Title), false, false)
+	titleSection := slack.NewSectionBlock(titleText)
 
 	bodyText := slack.NewTextBlockObject("mrkdwn", githubmarkdownconvertergo.Slack(d.Body), false, false)
 	bodySection := slack.NewSectionBlock(bodyText, nil, nil)
