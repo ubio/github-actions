@@ -19,8 +19,6 @@ on:
         required: true
       SLACK_TOKEN:
         required: true
-      NAME:
-        required: true
 
 jobs:
   build_image:
