@@ -1,5 +1,3 @@
-name: Build Image
-
 on:
   workflow_call:
     inputs:
@@ -12,10 +10,17 @@ on:
       name:
         required: true
         type: string
+    secrets:
+      REGISTRY_SECRET:
+        required: true
+      SLACK_CHANNEL:
+        required: true
+      SLACK_TOKEN:
+        required: true
 
 jobs:
   build_image:
-    name: Builds a docker image and pushes to the registry
+    name: Builds Image
     runs-on: ubuntu-latest
     steps:
       - name: Extract tag as an ENV var

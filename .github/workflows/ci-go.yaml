@@ -1,12 +1,10 @@
-name: Go Test
-
 on:
   workflow_call:
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: CI
+    name: Go tests
     steps:
       - name: Setup Go
         uses: actions/setup-go@v2
