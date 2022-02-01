@@ -32,7 +32,7 @@ jobs:
         with:
           registry: gcr.io
           username: _json_key
-          password: ${{ secrets.GCP_REGISTRY_ACCESS }}
+          password: ${{ secrets.REGISTRY_SECRET }}
       - name: Build and Push image
         uses: docker/build-push-action@v2
         with:
@@ -51,4 +51,4 @@ jobs:
         with:
           channel: ${{ secrets.SLACK_CHANNEL }}
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          message: ":suspicious: *${{ inputs.name }}* workflow failed\n<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Run ${{ github.run_id }}>"
+          message: ":suspicious: *${{ inputs.name }}* build failed - Run <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.run_id }}>"
