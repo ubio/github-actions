@@ -44,6 +44,13 @@ jobs:
         if: ${{ success() }}
         uses: docker://automationcloud/rsslack:latest
         with:
-          channel: ${{ inputs.slack_channel }}
+          channel: ${{ secrets.slack_channel }}
           slack_token: ${{ secrets.SLACK_TOKEN }}
           message: ":package: *${{ inputs.name }}* has been built and pushed to `${{ inputs.image }}:${{ env.TAG }}`"
+      - name: Notify Slack on Failure
+        if: ${{ failure() }}
+        uses: docker://automationcloud/rsslack:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          message: ":suspicious: *${{ inputs.name }}* workflow failed\n<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Run ${{ github.run_id }}>"
