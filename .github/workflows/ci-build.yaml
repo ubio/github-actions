@@ -20,7 +20,7 @@ on:
 
 jobs:
   build_image:
-    name: Builds Image
+    name: Image
     runs-on: ubuntu-latest
     steps:
       - name: Extract tag as an ENV var

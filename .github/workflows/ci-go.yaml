@@ -4,7 +4,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Go tests
+    name: Go
     steps:
       - name: Setup Go
         uses: actions/setup-go@v2
