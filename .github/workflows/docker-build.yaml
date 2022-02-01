@@ -12,11 +12,10 @@ on:
       name:
         required: true
         type: string
-      slack_channel:
-        required: true
-        type: string
     secrets:
       REGISTRY_SECRET:
+        required: true
+      SLACK_CHANNEL:
         required: true
       SLACK_TOKEN:
         required: true
