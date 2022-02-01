@@ -9,8 +9,16 @@ on:
       ref:
         required: true
         type: string
+      name:
+        required: true
+        type: string
+      slack_channel:
+        required: true
+        type: string
     secrets:
       REGISTRY_SECRET:
+        required: true
+      SLACK_TOKEN:
         required: true
 
 jobs:
@@ -33,3 +41,10 @@ jobs:
         with:
           tags: ${{ inputs.image }}:${{ env.TAG }}
           push: true
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/rsslack:latest
+        with:
+          channel: ${{ inputs.slack_channel }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          message: ":package: *${{ inputs.name }}* has been built and pushed to `${{ inputs.image }}:${{ env.TAG }}`"
