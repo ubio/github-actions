@@ -1,4 +1,4 @@
-name: CI - Go
+name: Go Test
 
 on:
   workflow_call:
