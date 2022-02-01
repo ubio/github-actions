@@ -12,13 +12,6 @@ on:
       name:
         required: true
         type: string
-    secrets:
-      REGISTRY_SECRET:
-        required: true
-      SLACK_CHANNEL:
-        required: true
-      SLACK_TOKEN:
-        required: true
 
 jobs:
   build_image:
@@ -34,7 +27,7 @@ jobs:
         with:
           registry: gcr.io
           username: _json_key
-          password: ${{ secrets.REGISTRY_SECRET }}
+          password: ${{ secrets.GCP_REGISTRY_ACCESS }}
       - name: Build and Push image
         uses: docker/build-push-action@v2
         with:

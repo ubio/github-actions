@@ -1,0 +1,22 @@
+name: CI - Go
+
+on:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: CI
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: "1.17"
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Bootstrap
+        run: script/bootstrap
+      - name: Build
+        run: script/build
+      - name: Test
+        run: script/test
