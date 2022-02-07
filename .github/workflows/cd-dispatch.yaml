@@ -4,18 +4,6 @@ on:
       event_name:
         required: true
         type: string
-      image_tag:
-        required: true
-        type: string
-      path:
-        required: true
-        type: string
-      auto_merge:
-        required: true
-        type: boolean
-      env_name:
-        required: true
-        type: string
 jobs:
   dispatch:
     name: Dispatch to k8s
@@ -34,5 +22,5 @@ jobs:
           owner: ubio
           repository: k8s
           token: ${{ secrets.ACCESS_TOKEN }}
-          event: built-automation-cloud-website
+          event: ${{ inputs.event_name }}
           payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "tag": "${{ env.RELEASE_VERSION }}"}'
