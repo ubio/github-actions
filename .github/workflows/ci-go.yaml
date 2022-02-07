@@ -1,5 +1,8 @@
 on:
   workflow_call:
+    secrets:
+      ACCESS_TOKEN:
+        required: true
 
 jobs:
   test:
@@ -10,10 +13,15 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: "1.17"
+      - name: Grant private modules access
+        run: |
+          git config --global url."https://ubiobot:${{ secrets.ACCESS_TOKEN }}@github.com".insteadOf "https://github.com"
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Bootstrap
         run: script/bootstrap
+      - name: Vendor
+        run: script/vendor
       - name: Build
         run: script/build
       - name: Test
