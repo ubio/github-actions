@@ -1,0 +1,38 @@
+on:
+  workflow_call:
+    inputs:
+      event_name:
+        required: true
+        type: string
+      image_tag:
+        required: true
+        type: string
+      path:
+        required: true
+        type: string
+      auto_merge:
+        required: true
+        type: boolean
+      env_name:
+        required: true
+        type: string
+jobs:
+  dispatch:
+    name: Dispatch to k8s
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Extract tag as env var
+        run: |
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Notify k8s repo
+        uses: docker://automationcloud/repository-dispatch:latest
+        with:
+          owner: ubio
+          repository: k8s
+          token: ${{ secrets.ACCESS_TOKEN }}
+          event: built-automation-cloud-website
+          payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "tag": "${{ env.RELEASE_VERSION }}"}'
