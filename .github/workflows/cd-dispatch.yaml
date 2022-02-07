@@ -4,6 +4,9 @@ on:
       event_name:
         required: true
         type: string
+    secrets:
+      ACCESS_TOKEN:
+        required: true
 jobs:
   dispatch:
     name: Dispatch to k8s
