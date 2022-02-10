@@ -10,6 +10,10 @@ on:
       name:
         required: true
         type: string
+      file:
+        required: false
+        type: string
+        default: "Dockerfile"
     secrets:
       REGISTRY_SECRET:
         required: true
