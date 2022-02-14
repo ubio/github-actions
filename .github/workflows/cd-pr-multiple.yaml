@@ -1,0 +1,66 @@
+on:
+  workflow_call:
+    inputs:
+      image_name_one:
+        required: true
+        type: string
+      image_name_two:
+        required: true
+        type: string
+      image_tag:
+        required: true
+        type: string
+      path:
+        required: true
+        type: string
+      auto_merge:
+        required: true
+        type: boolean
+      env_name:
+        required: true
+        type: string
+    secrets:
+      ACCESS_TOKEN:
+        required: true
+jobs:
+  create_pr:
+    name: Create PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Update kustomization.yaml for image one
+        uses: mikefarah/yq@3.3.0
+        with:
+          cmd: yq w -i ./configs/${{ inputs.path }}/overlays/${{ inputs.env_name }}/kustomization.yaml "images.(name==${{ inputs.image_name_one }}).newTag" ${{ inputs.image_tag }}
+
+      - name: Update kustomization.yaml for image two
+        uses: mikefarah/yq@3.3.0
+        with:
+          cmd: yq w -i ./configs/${{ inputs.path }}/overlays/${{ inputs.env_name }}/kustomization.yaml "images.(name==${{ inputs.image_name_two }}).newTag" ${{ inputs.image_tag }}
+
+      - name: Build
+        uses: karancode/kustomize-github-action@master
+        with:
+          kustomize_version: "3.9.3"
+          kustomize_build_dir: "./configs/${{ inputs.path }}/overlays/${{ inputs.env_name }}"
+          kustomize_comment: true
+          kustomize_output_file: "./configs/${{ inputs.path }}/manifests/${{ inputs.env_name }}/install.yaml"
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Create the PR
+        uses: docker://automationcloud/pull-request:latest
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          owner: ubio
+          repository: k8s
+          message: Update image
+          files: configs/${{ inputs.path }}/overlays/${{ inputs.env_name }}/kustomization.yaml,configs/${{ inputs.path }}/manifests/${{ inputs.env_name }}/install.yaml
+          title: Update ${{ inputs.image_name }} to ${{ inputs.image_tag }} (${{ inputs.env_name }})
+          body: Automated PR for ${{ inputs.image_name }}:${{ inputs.image_tag }} (${{ inputs.env_name }})
+          head: ${{ inputs.image_name }}-${{ github.run_id }}-${{ inputs.env_name }}
+          base: master
+          draft: false
+          maintainer_can_modify: true
+          merge: ${{ inputs.auto_merge }}
