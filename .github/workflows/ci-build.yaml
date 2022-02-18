@@ -21,6 +21,8 @@ on:
         required: true
       SLACK_TOKEN:
         required: true
+      NPM_TOKEN:
+        required: false
 
 jobs:
   build_image:
@@ -43,6 +45,9 @@ jobs:
           tags: ${{ inputs.image }}:${{ env.TAG }}
           file: ${{ inputs.file }}
           push: true
+          build-args: |
+            NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            VERSION=${{ env.TAG }}
       - name: Notify Slack
         if: ${{ success() }}
         uses: docker://automationcloud/rsslack:latest
