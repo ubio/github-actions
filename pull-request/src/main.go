@@ -224,7 +224,7 @@ func getTree(ref *github.Reference) (tree *github.Tree, err error) {
 }
 
 func mergePullRequest(pr *github.PullRequest) error {
-	for attempt := 0; attempt < 3; attempt++ {
+	for attempt := 1; attempt <= 3; attempt++ {
 		fmt.Printf("Attempting to auto-merge PR #%d, attempt #%d...\n", pr.GetNumber(), attempt)
 		if err = awaitMergeableState(pr); err != nil {
 			return err
