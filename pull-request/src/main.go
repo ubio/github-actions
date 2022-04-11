@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"strings"
 	"time"
 
 	"github.com/caarlos0/env"
-	"github.com/cenkalti/backoff/v4"
+	backoff "github.com/cenkalti/backoff/v4"
 	"github.com/google/go-github/v30/github"
 	"golang.org/x/oauth2"
 )
@@ -20,6 +21,10 @@ var (
 	cfg    config
 	client *github.Client
 	ctx    context.Context
+)
+
+var (
+	ErrMergeFailed = fmt.Errorf("failed to merge pull request")
 )
 
 type config struct {
@@ -219,21 +224,32 @@ func getTree(ref *github.Reference) (tree *github.Tree, err error) {
 }
 
 func mergePullRequest(pr *github.PullRequest) error {
-	if err = awaitMergeableState(pr); err != nil {
-		return err
+	for attempt := 0; attempt < 3; attempt++ {
+		fmt.Printf("Attempting to auto-merge PR #%d, attempt #%d...\n", pr.GetNumber(), attempt)
+		if err = awaitMergeableState(pr); err != nil {
+			return err
+		}
+		state, resp, err := client.PullRequests.Merge(ctx, cfg.Owner, cfg.Repo, pr.GetNumber(), "Auto merging pull request", nil)
+		if err != nil {
+			return err
+		}
+		if resp == nil {
+			return fmt.Errorf("nil response received")
+		}
+		// we add this delay at the API can return a 405 when the base branch has changed and it not yet
+		// considered mergeable, so we break back out of the loop and try again.
+		//
+		// ref: https://github.community/t/merging-via-rest-api-returns-405-base-branch-was-modified-review-and-try-the-merge-again/13787
+		if resp.StatusCode == http.StatusMethodNotAllowed {
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		if !*state.Merged {
+			return ErrMergeFailed
+		}
+		return nil
 	}
-	msg := "Auto merging pull request"
-	state, resp, err := client.PullRequests.Merge(ctx, cfg.Owner, cfg.Repo, pr.GetNumber(), msg, nil)
-	if err != nil {
-		return err
-	}
-	if resp == nil {
-		return fmt.Errorf("nil response received")
-	}
-	if !*state.Merged {
-		fmt.Errorf("failed to merge pull request")
-	}
-	return nil
+	return ErrMergeFailed
 }
 
 func awaitMergeableState(pr *github.PullRequest) error {

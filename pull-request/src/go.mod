@@ -1,4 +1,4 @@
-module github.com/ubio/github-actions/repository-dispatch/src
+module github.com/ubio/github-actions/pull-request/src
 
 go 1.13
 
