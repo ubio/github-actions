@@ -38,19 +38,19 @@ jobs:
       - name: Build and Push image
         uses: docker/build-push-action@v2
         with:
-          tags: ${{ inputs.image }}:${{ github.ref }}
+          tags: ${{ inputs.image }}:${{ inputs.ref }}
           file: ${{ inputs.file }}
           push: true
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
-            VERSION=${{ env.TAG }}
+            VERSION=${{ inputs.ref }}
       - name: Notify Slack
         if: ${{ success() }}
         uses: docker://automationcloud/rsslack:latest
         with:
           channel: ${{ secrets.slack_channel }}
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          message: ":package: *${{ inputs.name }}* has been built and pushed to `${{ inputs.image }}:${{ env.TAG }}`"
+          message: ":package: *${{ inputs.name }}* has been built and pushed to `${{ inputs.image }}:${{ inputs.ref }}`"
       - name: Notify Slack on Failure
         if: ${{ failure() }}
         uses: docker://automationcloud/rsslack:latest
