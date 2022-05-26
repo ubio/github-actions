@@ -1,0 +1,60 @@
+on:
+  workflow_call:
+    inputs:
+      image:
+        required: true
+        type: string
+      ref:
+        required: true
+        type: string
+      name:
+        required: true
+        type: string
+      file:
+        required: false
+        type: string
+        default: "Dockerfile"
+    secrets:
+      REGISTRY_SECRET:
+        required: true
+      SLACK_CHANNEL:
+        required: true
+      SLACK_TOKEN:
+        required: true
+      NPM_TOKEN:
+        required: false
+
+jobs:
+  build_image:
+    name: Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to the Registry
+        uses: docker/login-action@v1
+        with:
+          registry: gcr.io
+          username: _json_key
+          password: ${{ secrets.REGISTRY_SECRET }}
+      - name: Build and Push image
+        uses: docker/build-push-action@v2
+        with:
+          tags: ${{ inputs.image }}:${{ github.ref }}
+          file: ${{ inputs.file }}
+          push: true
+          build-args: |
+            NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+            VERSION=${{ env.TAG }}
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/rsslack:latest
+        with:
+          channel: ${{ secrets.slack_channel }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          message: ":package: *${{ inputs.name }}* has been built and pushed to `${{ inputs.image }}:${{ env.TAG }}`"
+      - name: Notify Slack on Failure
+        if: ${{ failure() }}
+        uses: docker://automationcloud/rsslack:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          message: ":suspicious: *${{ inputs.name }}* build failed - Run <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.run_id }}>"
