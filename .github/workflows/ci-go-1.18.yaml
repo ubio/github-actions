@@ -18,6 +18,7 @@ jobs:
           git config --global url."https://ubiobot:${{ secrets.ACCESS_TOKEN }}@github.com".insteadOf "https://github.com"
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Bootstrap
+        run: script/bootstrap
       - name: Test
-        run: |
-          go test -v ./...
+        run: script/test
