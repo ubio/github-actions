@@ -15,7 +15,9 @@ on:
         type: string
         default: "Dockerfile"
     secrets:
-      REGISTRY_SECRET:
+      DOCKER_USERNAME:
+        required: true
+      DOCKER_PASSWORD:
         required: true
       SLACK_CHANNEL:
         required: true
