@@ -31,6 +31,11 @@ jobs:
         run: |
           ref="${{ github.ref }}"
           echo "TAG=${ref/refs\/tags\//}" >> $GITHUB_ENV
+      - name: Docker login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and Push image
         uses: docker/build-push-action@v2
         with:
@@ -39,8 +44,6 @@ jobs:
           file: ${{ inputs.file }}
           push: true
           repository: automationcloud/kubeseal
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Notify Slack
         if: ${{ success() }}
         uses: docker://automationcloud/rsslack:latest
