@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"log"
@@ -34,6 +35,7 @@ func main() {
 	if body != "" {
 		stringReader := strings.NewReader(body)
 		req.Body = io.NopCloser(stringReader)
+		req.Header.Add("Content-Type", "application/json")
 	}
 
 	client := http.Client{}
@@ -44,6 +46,10 @@ func main() {
 		return
 	}
 	defer response.Body.Close()
+
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(response.Body)
+	log.Println(buf.String())
 
 }
 
