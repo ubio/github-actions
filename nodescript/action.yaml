@@ -1,0 +1,19 @@
+name: NodeScript
+description: Invokes a NodeScript graph
+inputs:
+  url:
+    description: The endpoint for your graph
+    required: true
+  method:
+    description: The request method to use
+    required: false
+  body:
+    description: A message body to send to the endpoint
+    required: false
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.url }}
+    - ${{ inputs.method }}
+    - ${{ inputs.body }}
