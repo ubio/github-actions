@@ -48,6 +48,8 @@ jobs:
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
             VERSION=${{ env.TAG }}
+          labels: |
+            source-url=https://github.com/${{ github.repository }}
       - name: Notify Slack
         if: ${{ success() }}
         uses: docker://automationcloud/rsslack:latest
