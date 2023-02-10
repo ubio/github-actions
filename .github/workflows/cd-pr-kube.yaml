@@ -32,7 +32,7 @@ jobs:
           cmd: yq w -i ./kube/${{ inputs.path }}/overlays/${{ inputs.env_name }}/kustomization.yaml "images.(name==${{ inputs.image_name }}).newTag" ${{ inputs.image_tag }}
 
       - name: Build
-        uses: karancode/kustomize-github-action@1.2.4
+        uses: karancode/kustomize-github-action@master
         with:
           kustomize_version: "3.9.3"
           kustomize_build_dir: "./kube/${{ inputs.path }}/overlays/${{ inputs.env_name }}"
