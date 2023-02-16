@@ -238,7 +238,7 @@ jobs:
           tags: latest
           tag_with_sha: true
 
-  release-nodescript:
+  release-kustomize:
     runs-on: ubuntu-latest
     name: release-kustomize
     steps:
