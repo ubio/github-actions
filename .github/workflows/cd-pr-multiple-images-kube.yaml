@@ -40,11 +40,9 @@ jobs:
           cmd: yq w -i ./kube/${{ inputs.path }}/overlays/${{ inputs.env_name }}/kustomization.yaml "images.(name==${{ inputs.image_name_two }}).newTag" ${{ inputs.image_tag }}
 
       - name: Build
-        uses: karancode/kustomize-github-action@master
+        uses: docker://automationcloud/kustomize:latest
         with:
-          kustomize_version: "3.9.3"
           kustomize_build_dir: "./kube/${{ inputs.path }}/overlays/${{ inputs.env_name }}"
-          kustomize_comment: true
           kustomize_output_file: "./kube/${{ inputs.path }}/manifests/${{ inputs.env_name }}/install.yaml"
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}

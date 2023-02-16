@@ -253,3 +253,14 @@ jobs:
           path: ./kustomize
           tags: latest
           tag_with_sha: true
+      - name: Notify Slack
+        if: ${{ success() }}
+        uses: docker://automationcloud/slack-docker-build-success:latest
+        with:
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          name: "Github Action `kustomize`"
+          registry: registry.hub.docker.com
+          namespace: automationcloud
+          image: kustomize
+          tag: latest
