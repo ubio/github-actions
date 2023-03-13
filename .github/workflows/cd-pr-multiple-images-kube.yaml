@@ -42,7 +42,7 @@ jobs:
         with:
           cmd: yq w -i ./kube/${{ inputs.path }}/overlays/${{ inputs.env_name }}/kustomization.yaml "images.(name==${{ inputs.image_name_two }}).newTag" ${{ inputs.image_tag }}
 
-      - name: Update kustomization.yaml for image two
+      - name: Update kustomization.yaml for image three
         uses: mikefarah/yq@3.3.0
         with:
           cmd: yq w -i ./kube/${{ inputs.path }}/overlays/${{ inputs.env_name }}/kustomization.yaml "images.(name==${{ inputs.image_name_three }}).newTag" ${{ inputs.image_tag }}
