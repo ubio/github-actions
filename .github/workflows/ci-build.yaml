@@ -42,7 +42,7 @@ jobs:
       - name: Build and Push image
         uses: docker/build-push-action@v2
         with:
-          tags: ${{ inputs.image }}:${{ env.TAG }}
+          tags: ${{ inputs.image }}:${{ env.TAG }},${{ inputs.image }}:latest
           file: ${{ inputs.file }}
           push: true
           build-args: |
