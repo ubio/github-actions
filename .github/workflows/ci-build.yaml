@@ -23,6 +23,8 @@ on:
         required: true
       NPM_TOKEN:
         required: false
+      GIT_AUTH_TOKEN:
+        required: false
 
 jobs:
   build_image:
@@ -48,6 +50,7 @@ jobs:
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
             VERSION=${{ env.TAG }}
+            GIT_AUTH_TOKEN=${{ secrets.GIT_AUTH_TOKEN }}
           labels: |
             source-url=https://github.com/${{ github.repository }}
       - name: Notify Slack
