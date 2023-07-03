@@ -50,7 +50,7 @@ jobs:
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
             VERSION=${{ env.TAG }}
-            GIT_AUTH_TOKEN=${{ secrets.GIT_AUTH_TOKEN }}
+            GITHUB_TOKEN=${{ secrets.GIT_AUTH_TOKEN }}
           labels: |
             source-url=https://github.com/${{ github.repository }}
       - name: Notify Slack
