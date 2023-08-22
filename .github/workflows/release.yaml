@@ -253,7 +253,7 @@ jobs:
           path: ./kustomize
           tags: latest,kustomize-v3.9.3
           tag_with_sha: true
-          build-args: |
+          build_args: |
             KUSTOMIZE_VERSION=v3.9.3
       - name: release kustomize v5
         uses: docker/build-push-action@v1
@@ -264,7 +264,7 @@ jobs:
           path: ./kustomize
           tags: kustomize-v5.1.1
           tag_with_sha: true
-          build-args: |
+          build_args: |
             KUSTOMIZE_VERSION=v5.1.1
 
       - name: Notify Slack
