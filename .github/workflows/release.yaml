@@ -244,15 +244,29 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v2
-      - name: release kustomize
+      - name: release kustomize v3
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: automationcloud/kustomize
           path: ./kustomize
-          tags: latest
+          tags: latest,kustomize-v3.9.3
           tag_with_sha: true
+          build-args: |
+            KUSTOMIZE_VERSION=v3.9.3
+      - name: release kustomize v5
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: automationcloud/kustomize
+          path: ./kustomize
+          tags: kustomize-v5.1.1
+          tag_with_sha: true
+          build-args: |
+            KUSTOMIZE_VERSION=v5.1.1
+
       - name: Notify Slack
         if: ${{ success() }}
         uses: docker://automationcloud/slack-docker-build-success:latest
