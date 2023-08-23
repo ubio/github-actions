@@ -36,7 +36,7 @@ jobs:
           cmd: yq w -i ./kube/${{ inputs.path }}/overlays/${{ inputs.env_name }}/kustomization.yaml "images.(name==${{ inputs.image_name }}).newTag" ${{ inputs.image_tag }}
 
       - name: Build
-        uses: docker://automationcloud/kustomize:${{ inputs.kustomize_version }}
+        uses: docker://automationcloud/kustomize:kustomize-v5
         with:
           kustomize_build_dir: "./kube/${{ inputs.path }}/overlays/${{ inputs.env_name }}"
           kustomize_output_file: "./kube/${{ inputs.path }}/manifests/${{ inputs.env_name }}/install.yaml"
