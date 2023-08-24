@@ -251,9 +251,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: automationcloud/kustomize
           path: ./kustomize
-          tags: latest,kustomize-v3
+          tags: kustomize-v3
           tag_with_sha: true
-          build_args: KUSTOMIZE_VERSION=v3.9.3
+          build_args: KUSTOMIZE_VERSION=3.9.3
       - name: release kustomize v5
         uses: docker/build-push-action@v1
         with:
@@ -261,9 +261,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: automationcloud/kustomize
           path: ./kustomize
-          tags: kustomize-v5
+          tags: latest,kustomize-v5
           tag_with_sha: true
-          build_args: KUSTOMIZE_VERSION=v5.1.1
+          build_args: KUSTOMIZE_VERSION=5.1.1
 
       - name: Notify Slack
         if: ${{ success() }}
