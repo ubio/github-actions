@@ -17,7 +17,7 @@ on:
       platform:
         required: false
         type: string
-        default: ""
+        default: "linux/x86_64"
     secrets:
       REGISTRY_SECRET:
         required: true
