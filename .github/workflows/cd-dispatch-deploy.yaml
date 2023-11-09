@@ -48,5 +48,5 @@ jobs:
               "image_tag": "${{ env.RELEASE_VERSION }}",
               "env_name": "${{ inputs.env_name }}",
               "app_path": "${{ inputs.app_path }}",
-              "auto_merge": "${{ inputs.auto_merge }}"
+              "auto_merge": ${{ inputs.auto_merge }}
             }
