@@ -10,7 +10,6 @@ on:
       gh_base_branch:
         type: string
         required: true
-        default: main
       image_name:
         type: string
         required: true
