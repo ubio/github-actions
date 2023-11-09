@@ -14,6 +14,10 @@ on:
         required: false
         type: string
         default: "Dockerfile"
+      platform:
+        required: false
+        type: string
+        default: "linux/x86_64"
     secrets:
       REGISTRY_SECRET:
         required: true
@@ -44,6 +48,7 @@ jobs:
         with:
           tags: ${{ inputs.image }}:${{ env.TAG }},${{ inputs.image }}:latest
           file: ${{ inputs.file }}
+          platform: ${{ inputs.platform }}
           push: true
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
