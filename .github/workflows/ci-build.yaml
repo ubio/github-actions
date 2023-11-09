@@ -14,7 +14,7 @@ on:
         required: false
         type: string
         default: "Dockerfile"
-      platform:
+      platforms:
         required: false
         type: string
         default: "linux/x86_64"
@@ -48,7 +48,7 @@ jobs:
         with:
           tags: ${{ inputs.image }}:${{ env.TAG }},${{ inputs.image }}:latest
           file: ${{ inputs.file }}
-          platform: ${{ inputs.platform }}
+          platforms: ${{ inputs.platforms }}
           push: true
           build-args: |
             NPM_TOKEN=${{ secrets.NPM_TOKEN }}
