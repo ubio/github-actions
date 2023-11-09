@@ -1,0 +1,46 @@
+on:
+  workflow_call:
+    inputs:
+      gh_user:
+        required: true
+        type: string
+      gh_repo:
+        required: true
+        type: string
+      event_name:
+        required: true
+        type: string
+      app_name:
+        required: true
+        type: string
+      env_name:
+        required: true
+        type: string
+    secrets:
+      ACCESS_TOKEN:
+        required: true
+jobs:
+  dispatch:
+    name: Dispatch repo event
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Extract tag as env var
+        run: |
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Notify repo
+        uses: docker://automationcloud/repository-dispatch:latest
+        with:
+          owner: ${{ inputs.gh_user }}
+          repository: ${{ inputs.gh_repo }}
+          token: ${{ secrets.ACCESS_TOKEN }}
+          event: ${{ inputs.event_name }}
+          payload: |-
+            {
+              "ref": "${{ github.ref }}",
+              "sha": "${{ github.sha }}",
+              "tag": "${{ env.RELEASE_VERSION }}",
+              "app_name": "${{ inputs.app_name }}",
+              "env_name": "${{ inputs.env_name }}"
+            }
