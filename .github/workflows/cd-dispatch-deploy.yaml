@@ -7,15 +7,21 @@ on:
       gh_repo:
         required: true
         type: string
-      event_name:
+      image_name:
         required: true
         type: string
-      app_name:
+      image_tag:
         required: true
         type: string
       env_name:
         required: true
         type: string
+      app_path:
+        required: true
+        type: string
+      auto_merge:
+        required: true
+        type: boolean
     secrets:
       ACCESS_TOKEN:
         required: true
@@ -35,12 +41,15 @@ jobs:
           owner: ${{ inputs.gh_user }}
           repository: ${{ inputs.gh_repo }}
           token: ${{ secrets.ACCESS_TOKEN }}
-          event: ${{ inputs.event_name }}
+          event: cd-deploy
           payload: |-
             {
               "ref": "${{ github.ref }}",
               "sha": "${{ github.sha }}",
               "tag": "${{ env.RELEASE_VERSION }}",
-              "app_name": "${{ inputs.app_name }}",
-              "env_name": "${{ inputs.env_name }}"
+              "image_name": "${{ inputs.image_name }}",
+              "image_tag": "${{ env.RELEASE_VERSION }}",
+              "env_name": "${{ inputs.env_name }}",
+              "app_path": "${{ inputs.app_path }}",
+              "auto_merge": "${{ inputs.auto_merge }}"
             }
