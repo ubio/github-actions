@@ -1,6 +1,12 @@
 on:
   workflow_call:
     inputs:
+      gh_user:
+        required: true
+        type: string
+      gh_repo:
+        required: true
+        type: string
       image_name:
         required: true
         type: string
@@ -43,8 +49,8 @@ jobs:
         uses: docker://automationcloud/pull-request:latest
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
-          owner: ubio
-          repository: k8s
+          owner: ${{ inputs.gh_user }}
+          repository: ${{ inputs.gh_repo }}
           message: Update image
           files: ${{ inputs.app_path }}/overlays/${{ inputs.env_name }}/kustomization.yaml,${{ inputs.app_path }}/manifests/${{ inputs.env_name }}/install.yaml
           title: Update ${{ inputs.image_name }} to ${{ inputs.image_tag }} (${{ inputs.env_name }})
