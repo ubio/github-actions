@@ -2,26 +2,30 @@ on:
   workflow_call:
     inputs:
       gh_user:
-        required: true
         type: string
+        required: true
       gh_repo:
-        required: true
         type: string
+        required: true
+      gh_base_branch:
+        type: string
+        required: true
+        default: main
       image_name:
-        required: true
         type: string
+        required: true
       image_tag:
-        required: true
         type: string
+        required: true
       env_name:
-        required: true
         type: string
+        required: true
       app_path:
-        required: true
         type: string
-      auto_merge:
         required: true
+      auto_merge:
         type: boolean
+        required: true
     secrets:
       ACCESS_TOKEN:
         required: true
@@ -56,7 +60,7 @@ jobs:
           title: Update ${{ inputs.image_name }} to ${{ inputs.image_tag }} (${{ inputs.env_name }})
           body: Automated PR for ${{ inputs.image_name }}:${{ inputs.image_tag }} (${{ inputs.env_name }})
           head: ${{ inputs.image_name }}-${{ github.run_id }}-${{ inputs.env_name }}
-          base: master
+          base: ${{ inputs.gh_base_branch }}
           draft: false
           maintainer_can_modify: true
           merge: ${{ inputs.auto_merge }}
