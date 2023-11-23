@@ -100,6 +100,11 @@ func main() {
 		fmt.Println("::set-output name=merged::true")
 		log.Println("successfully merged pull request")
 	}
+
+	pr, err = requestReviewers(pr, *github.ReviewersRequest{
+		Reviewers:     []string{}, // TODO extend PR vars
+		TeamReviewers: []string{},
+	})
 }
 
 // createPR builds and creates the PR on github
@@ -285,4 +290,16 @@ func awaitMergeableState(pr *github.PullRequest) error {
 	}
 
 	return fmt.Errorf("timed out waiting for PR to be mergeable")
+}
+
+func requestReviewers(pr *github.PullRequest, reviewers *github.ReviewersRequest) (*github.PullRequest, error) {
+	pr, _, err := pr.RequestReviewers(
+		ctx,
+		cfg.Owner,
+		cfg.Repo,
+		pr.GetNumber(),
+		reviewers,
+	)
+
+	return pr, err
 }
