@@ -20,11 +20,12 @@ The PR author is set to the owner of the access token.
 | draft                 | `false`   | `false` | Whether the PR is in draft status
 | maintainer_can_modify | `false`   | `true`  | Whether repo maintainers can modify the PR
 | merge                 | `false`   | `false` | Whether to automatically merge the PR (if mergeable)
+| reviewers             | `false`   | `""`    | Request reviewers for the PR
 
 ## Outputs
 
 | Output  | Description
-| ------- | ----------- 
+| ------- | -----------
 | pr      | The URL to the created Pull Request
 | merged  | true/false indicating whether the Pull Request was merged after creation
 

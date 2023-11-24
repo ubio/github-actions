@@ -19,6 +19,10 @@ on:
       auto_merge:
         required: true
         type: boolean
+      pr_reviewers:
+        type: string
+        required: false
+        default: ""
     secrets:
       ACCESS_TOKEN:
         required: true
@@ -48,5 +52,6 @@ jobs:
               "image_tag": "${{ env.RELEASE_VERSION }}",
               "env_name": "${{ inputs.env_name }}",
               "app_path": "${{ inputs.app_path }}",
-              "auto_merge": ${{ inputs.auto_merge }}
+              "auto_merge": ${{ inputs.auto_merge }},
+              "pr_reviewers": ${{ inputs.pr_reviewers }}
             }

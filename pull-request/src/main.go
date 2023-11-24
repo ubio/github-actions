@@ -42,6 +42,7 @@ type config struct {
 	MaintainerCanModify bool   `env:"INPUT_MAINTAINER_CAN_MODIFY" envDefault:"true"`
 	Draft               bool   `env:"INPUT_DRAFT" envDefault:"false"`
 	Merge               bool   `env:"INPUT_MERGE" envDefault:"false"`
+	Reviewers           string `env:"INPUT_REVIEWERS" envDefault:""`
 }
 
 func init() {
@@ -101,10 +102,12 @@ func main() {
 		log.Println("successfully merged pull request")
 	}
 
-	pr, err = requestReviewers(pr, *github.ReviewersRequest{
-		Reviewers:     []string{}, // TODO extend PR vars
-		TeamReviewers: []string{},
-	})
+	if cfg.Reviewers != "" {
+		pr, err = requestReviewers(pr, *github.ReviewersRequest{
+			Reviewers:     []string{cfg.Reviewers},
+			TeamReviewers: []string{},
+		})
+	}
 }
 
 // createPR builds and creates the PR on github
