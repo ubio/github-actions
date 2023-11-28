@@ -296,7 +296,7 @@ func awaitMergeableState(pr *github.PullRequest) error {
 }
 
 func requestReviewers(pr *github.PullRequest, reviewers *github.ReviewersRequest) (*github.PullRequest, error) {
-	pr, _, err := pr.RequestReviewers(
+	pr, _, err := client.PullRequests.RequestReviewers(
 		ctx,
 		cfg.Owner,
 		cfg.Repo,
