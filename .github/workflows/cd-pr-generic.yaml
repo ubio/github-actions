@@ -25,6 +25,10 @@ on:
       auto_merge:
         type: boolean
         required: true
+      assignees:
+        type: string
+        required: false
+        default: ""
     secrets:
       ACCESS_TOKEN:
         required: true
@@ -63,3 +67,4 @@ jobs:
           draft: false
           maintainer_can_modify: true
           merge: ${{ inputs.auto_merge }}
+          assignees: ${{ inputs.assignees }}

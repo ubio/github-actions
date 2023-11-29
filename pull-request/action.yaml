@@ -42,6 +42,10 @@ inputs:
     description: Whether to auto-merge the PR once it's mergeable
     required: false
     default: false
+  assignees:
+    description: Add assignees to the PR
+    required: false
+    default: ""
 output:
   pr:
     description: A link to the PR
@@ -64,6 +68,7 @@ runs:
     - ${{ inputs.draft }}
     - ${{ inputs.maintainer_can_modify }}
     - ${{ inputs.merge }}
+    - ${{ inputs.assignees }}
 branding:
   icon: target
   color: gray-dark

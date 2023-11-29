@@ -42,6 +42,7 @@ type config struct {
 	MaintainerCanModify bool   `env:"INPUT_MAINTAINER_CAN_MODIFY" envDefault:"true"`
 	Draft               bool   `env:"INPUT_DRAFT" envDefault:"false"`
 	Merge               bool   `env:"INPUT_MERGE" envDefault:"false"`
+	Assignees           string `env:"INPUT_ASSIGNEES" envDefault:""`
 }
 
 func init() {
@@ -99,6 +100,18 @@ func main() {
 		}
 		fmt.Println("::set-output name=merged::true")
 		log.Println("successfully merged pull request")
+	}
+
+	if cfg.Assignees != "" {
+		assignees := strings.Split(cfg.Assignees, ", ")
+		issue, err := addAssignees(pr, assignees)
+		if err != nil {
+			log.Println("Error while adding assignees to the pull request: %s", err)
+		} else {
+			for _, v := range assignees {
+				log.Println("PR %s assigned to %s", issue.GetHTMLURL, v)
+			}
+		}
 	}
 }
 
@@ -285,4 +298,16 @@ func awaitMergeableState(pr *github.PullRequest) error {
 	}
 
 	return fmt.Errorf("timed out waiting for PR to be mergeable")
+}
+
+func addAssignees(pr *github.PullRequest, assignees []string) (*github.Issue, error) {
+	issue, _, err := client.Issues.AddAssignees(
+		ctx,
+		cfg.Owner,
+		cfg.Repo,
+		pr.GetNumber(),
+		assignees,
+	)
+
+	return issue, err
 }
