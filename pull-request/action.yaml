@@ -42,8 +42,8 @@ inputs:
     description: Whether to auto-merge the PR once it's mergeable
     required: false
     default: false
-  reviewers:
-    description: Request reviewers for the PR
+  assignees:
+    description: Add assignees to the PR
     required: false
     default: ""
 output:
@@ -68,7 +68,7 @@ runs:
     - ${{ inputs.draft }}
     - ${{ inputs.maintainer_can_modify }}
     - ${{ inputs.merge }}
-    - ${{ inputs.reviewers }}
+    - ${{ inputs.assignees }}
 branding:
   icon: target
   color: gray-dark

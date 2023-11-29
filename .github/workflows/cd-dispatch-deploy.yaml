@@ -19,7 +19,7 @@ on:
       auto_merge:
         required: true
         type: boolean
-      pr_reviewers:
+      pr_assignees:
         type: string
         required: false
         default: ""
@@ -53,5 +53,5 @@ jobs:
               "env_name": "${{ inputs.env_name }}",
               "app_path": "${{ inputs.app_path }}",
               "auto_merge": ${{ inputs.auto_merge }},
-              "pr_reviewers": ${{ inputs.pr_reviewers }}
+              "pr_assignees": ${{ inputs.pr_assignees }}
             }

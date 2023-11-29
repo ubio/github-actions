@@ -42,7 +42,7 @@ type config struct {
 	MaintainerCanModify bool   `env:"INPUT_MAINTAINER_CAN_MODIFY" envDefault:"true"`
 	Draft               bool   `env:"INPUT_DRAFT" envDefault:"false"`
 	Merge               bool   `env:"INPUT_MERGE" envDefault:"false"`
-	Reviewers           string `env:"INPUT_REVIEWERS" envDefault:""`
+	Assignees           string `env:"INPUT_ASSIGNEES" envDefault:""`
 }
 
 func init() {
@@ -102,11 +102,16 @@ func main() {
 		log.Println("successfully merged pull request")
 	}
 
-	if cfg.Reviewers != "" {
-		pr, err = requestReviewers(pr, *github.ReviewersRequest{
-			Reviewers:     []string{cfg.Reviewers},
-			TeamReviewers: []string{},
-		})
+	if cfg.Assignees != "" {
+		assignees := strings.Split(cfg.Assignees, ", ")
+		issue, err := addAssignees(pr, assignees)
+		if err != nil {
+			log.Println("Error while adding assignees to the pull request: %s", err)
+		} else {
+			for _, v := range assignees {
+				log.Println("PR %s assigned to %s", issue.GetHTMLURL, v)
+			}
+		}
 	}
 }
 
@@ -295,14 +300,14 @@ func awaitMergeableState(pr *github.PullRequest) error {
 	return fmt.Errorf("timed out waiting for PR to be mergeable")
 }
 
-func requestReviewers(pr *github.PullRequest, reviewers *github.ReviewersRequest) (*github.PullRequest, error) {
-	pr, _, err := client.PullRequests.RequestReviewers(
+func addAssignees(pr *github.PullRequest, assignees []string) (*github.Issue, error) {
+	issue, _, err := client.Issues.AddAssignees(
 		ctx,
 		cfg.Owner,
 		cfg.Repo,
 		pr.GetNumber(),
-		reviewers,
+		assignees,
 	)
 
-	return pr, err
+	return issue, err
 }
