@@ -53,5 +53,5 @@ jobs:
               "env_name": "${{ inputs.env_name }}",
               "app_path": "${{ inputs.app_path }}",
               "auto_merge": ${{ inputs.auto_merge }},
-              "pr_assignees": ${{ inputs.pr_assignees }}
+              "pr_assignees": "${{ inputs.pr_assignees }}"
             }
