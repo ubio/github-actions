@@ -104,7 +104,8 @@ func main() {
 
 	if cfg.Assignees != "" {
 		assignees := strings.Split(cfg.Assignees, ", ")
-		issue, err := addAssignees(pr, assignees)
+		uniqueAssignees := removeDuplicates(assignees)
+		issue, err := addAssignees(pr, uniqueAssignees)
 		if err != nil {
 			log.Println("Error while adding assignees to the pull request: %s", err)
 		} else {
@@ -298,6 +299,20 @@ func awaitMergeableState(pr *github.PullRequest) error {
 	}
 
 	return fmt.Errorf("timed out waiting for PR to be mergeable")
+}
+
+func removeDuplicates(input []string) []string {
+	uniqueMap := make(map[string]bool)
+	result := make([]string, 0)
+
+	for _, element := range input {
+		if !uniqueMap[element] {
+			result = append(result, element)
+			uniqueMap[element] = true
+		}
+	}
+
+	return result
 }
 
 func addAssignees(pr *github.PullRequest, assignees []string) (*github.Issue, error) {
