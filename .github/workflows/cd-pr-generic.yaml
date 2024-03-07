@@ -60,7 +60,7 @@ jobs:
           repository: ${{ inputs.gh_repo }}
           message: Update image
           files: ${{ inputs.app_path }}/overlays/${{ inputs.env_name }}/kustomization.yaml,${{ inputs.app_path }}/manifests/${{ inputs.env_name }}/install.yaml
-          title: ${{ inputs.image_name }} ⇒ ${{ inputs.image_tag }} (${{ inputs.env_name }})
+          title: ${{ inputs.app_path }} ⇒ ${{ inputs.image_tag }} (${{ inputs.env_name }})
           body: Automated PR for ${{ inputs.image_name }}:${{ inputs.image_tag }} (${{ inputs.env_name }})
           head: ${{ inputs.image_name }}-${{ github.run_id }}-${{ inputs.env_name }}
           base: ${{ inputs.gh_base_branch }}
