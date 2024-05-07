@@ -25,8 +25,6 @@ on:
         required: true
       SLACK_TOKEN:
         required: true
-      NPM_TOKEN:
-        required: false
 
 jobs:
   build_image:
@@ -62,7 +60,6 @@ jobs:
           platforms: ${{ inputs.platforms }}
           push: true
           build-args: |
-            NPM_TOKEN=${{ secrets.NPM_TOKEN }}
             VERSION=${{ env.TAG }}
           labels: |
             source-url=https://github.com/${{ github.repository }}
