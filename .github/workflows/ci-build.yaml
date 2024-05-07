@@ -43,10 +43,21 @@ jobs:
           registry: gcr.io
           username: _json_key
           password: ${{ secrets.REGISTRY_SECRET }}
+      - name: Use EU Artifact Registry
+        # Should be removed after repos have been updated to use the eu prefix 
+        id: use_eu_registry
+        run: |
+          if [[ ${{ inputs.image }} != eu.* ]]; then
+            echo "Adding EU prefix"
+            echo "::set-output name=image::eu.${{ inputs.image }}"
+          else
+            echo "EU prefix already present"
+            echo "::set-output name=image::${{ inputs.image }}"
+          fi
       - name: Build and Push image
         uses: docker/build-push-action@v2
         with:
-          tags: ${{ inputs.image }}:${{ env.TAG }},${{ inputs.image }}:latest
+          tags: ${{ steps.use_eu_registry.outputs.image }}:${{ env.TAG }},${{ steps.use_eu_registry.outputs.image }}:latest
           file: ${{ inputs.file }}
           platforms: ${{ inputs.platforms }}
           push: true
@@ -61,7 +72,7 @@ jobs:
         with:
           channel: ${{ secrets.slack_channel }}
           slack_token: ${{ secrets.SLACK_TOKEN }}
-          message: ":package: *${{ inputs.name }}* has been built and pushed to `${{ inputs.image }}:${{ env.TAG }}`"
+          message: ":package: *${{ inputs.name }}* has been built and pushed to `${{ steps.use_eu_registry.outputs.image }}:${{ env.TAG }}`"
       - name: Notify Slack on Failure
         if: ${{ failure() }}
         uses: docker://automationcloud/rsslack:latest
