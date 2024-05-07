@@ -10,6 +10,9 @@ on:
       image_name_three:
         required: true
         type: string
+      image_name_four:
+        required: true
+        type: string
       image_tag:
         required: true
         type: string
@@ -46,6 +49,11 @@ jobs:
         uses: mikefarah/yq@3.3.0
         with:
           cmd: yq w -i ./kube/${{ inputs.path }}/overlays/${{ inputs.env_name }}/kustomization.yaml "images.(name==${{ inputs.image_name_three }}).newTag" ${{ inputs.image_tag }}
+
+      - name: Update kustomization.yaml for image four
+        uses: mikefarah/yq@3.3.0
+        with:
+          cmd: yq w -i ./kube/${{ inputs.path }}/overlays/${{ inputs.env_name }}/kustomization.yaml "images.(name==${{ inputs.image_name_four }}).newTag" ${{ inputs.image_tag }}
 
       - name: Build
         uses: docker://automationcloud/kustomize:latest
