@@ -44,6 +44,7 @@ jobs:
           username: _json_key
           password: ${{ secrets.REGISTRY_SECRET }}
       - name: Use EU Artifact Registry
+        # Should be removed after repos have been updated to use the eu prefix 
         id: use_eu_registry
         run: |
           if [[ ${{ inputs.image }} != eu.* ]]; then
