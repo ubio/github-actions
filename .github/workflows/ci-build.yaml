@@ -64,14 +64,14 @@ jobs:
           labels: |
             source-url=https://github.com/${{ github.repository }}
       - name: Notify Slack
-        if: ${{ SLACK_TOKEN && success() }}
+        if: ${{ inputs.SLACK_TOKEN && success() }}
         uses: docker://automationcloud/rsslack:latest
         with:
           channel: ${{ secrets.slack_channel }}
           slack_token: ${{ secrets.SLACK_TOKEN }}
           message: ":package: *${{ inputs.name }}* has been built and pushed to `${{ steps.use_eu_registry.outputs.image }}:${{ env.TAG }}`"
       - name: Notify Slack on Failure
-        if: ${{ SLACK_TOKEN && failure() }}
+        if: ${{ inputs.SLACK_TOKEN && failure() }}
         uses: docker://automationcloud/rsslack:latest
         with:
           channel: ${{ secrets.SLACK_CHANNEL }}
