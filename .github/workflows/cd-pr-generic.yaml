@@ -51,8 +51,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          sudo curl -sL -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
+          docker pull mikefarah/yq:3
+          yq() {
+            docker run --rm \
+              --user "$(id -u):$(id -g)" \
+              -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" \
+              -w "${GITHUB_WORKSPACE}" \
+              mikefarah/yq:3 \
+              "$@"
+          }
           curl -sL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.1.1/kustomize_v5.1.1_linux_amd64.tar.gz | sudo tar xz -C /usr/local/bin
 
           trim() {
