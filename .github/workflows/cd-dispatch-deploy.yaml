@@ -14,8 +14,9 @@ on:
         required: true
         type: string
       app_path:
-        required: true
+        required: false
         type: string
+        default: ""
       auto_merge:
         required: true
         type: boolean

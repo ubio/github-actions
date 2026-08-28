@@ -21,7 +21,8 @@ on:
         required: true
       app_path:
         type: string
-        required: true
+        required: false
+        default: ""
       auto_merge:
         type: boolean
         required: true
@@ -39,18 +40,72 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Update kustomization.yaml
-        uses: mikefarah/yq@3.3.0
-        with:
-          cmd: yq w -i ./${{ inputs.app_path }}/overlays/${{ inputs.env_name }}/kustomization.yaml "images.(name==${{ inputs.image_name }}).newTag" ${{ inputs.image_tag }}
-
-      - name: Build
-        uses: docker://automationcloud/kustomize:latest
-        with:
-          kustomize_build_dir: "./${{ inputs.app_path }}/overlays/${{ inputs.env_name }}"
-          kustomize_output_file: "./${{ inputs.app_path }}/manifests/${{ inputs.env_name }}/install.yaml"
+      - name: Update kustomizations and build manifests
+        id: bump
         env:
+          APP_PATH: ${{ inputs.app_path }}
+          ENV_NAME: ${{ inputs.env_name }}
+          IMAGE_NAME: ${{ inputs.image_name }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
           GITHUB_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          sudo curl -sL -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+          curl -sL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.1.1/kustomize_v5.1.1_linux_amd64.tar.gz | sudo tar xz -C /usr/local/bin
+
+          trim() {
+            local s="$1"
+            s="${s#"${s%%[![:space:]]*}"}"
+            s="${s%"${s##*[![:space:]]}"}"
+            s="${s%/}"
+            printf '%s' "$s"
+          }
+
+          paths=()
+          if [ -n "${APP_PATH}" ]; then
+            IFS=',' read -ra raw <<< "${APP_PATH}"
+            for p in "${raw[@]}"; do
+              p="$(trim "$p")"
+              if [ -n "$p" ]; then
+                paths+=("$p")
+              fi
+            done
+          else
+            while IFS= read -r file; do
+              [ -z "$file" ] && continue
+              name="$(yq r "$file" "images.(name==${IMAGE_NAME}).name" || true)"
+              if [ "$name" = "${IMAGE_NAME}" ]; then
+                file="${file#./}"
+                paths+=("${file%/overlays/${ENV_NAME}/kustomization.yaml}")
+              fi
+            done < <(find . -path "*/overlays/${ENV_NAME}/kustomization.yaml" | sort)
+          fi
+
+          if [ ${#paths[@]} -eq 0 ]; then
+            echo "No app paths found for image ${IMAGE_NAME} in env ${ENV_NAME}"
+            exit 1
+          fi
+
+          echo "Resolved app paths: ${paths[*]}"
+
+          files=()
+          for path in "${paths[@]}"; do
+            echo "Updating ${path}"
+            yq w -i "./${path}/overlays/${ENV_NAME}/kustomization.yaml" "images.(name==${IMAGE_NAME}).newTag" "${IMAGE_TAG}"
+
+            overlay="./${path}/overlays/${ENV_NAME}"
+            manifest="./${path}/manifests/${ENV_NAME}/install.yaml"
+            mkdir -p "$(dirname "${manifest}")"
+            kustomize build "${overlay}" > "${manifest}"
+
+            files+=("${path}/overlays/${ENV_NAME}/kustomization.yaml")
+            files+=("${path}/manifests/${ENV_NAME}/install.yaml")
+          done
+
+          files_csv="$(IFS=,; printf '%s' "${files[*]}")"
+          echo "files=${files_csv}" >> "${GITHUB_OUTPUT}"
 
       - name: Create the PR
         uses: docker://automationcloud/pull-request:latest
@@ -59,8 +114,8 @@ jobs:
           owner: ${{ inputs.gh_user }}
           repository: ${{ inputs.gh_repo }}
           message: Update image
-          files: ${{ inputs.app_path }}/overlays/${{ inputs.env_name }}/kustomization.yaml,${{ inputs.app_path }}/manifests/${{ inputs.env_name }}/install.yaml
-          title: ${{ inputs.app_path }} ⇒ ${{ inputs.image_tag }} (${{ inputs.env_name }})
+          files: ${{ steps.bump.outputs.files }}
+          title: ${{ inputs.image_name }} ⇒ ${{ inputs.image_tag }} (${{ inputs.env_name }})
           body: Automated PR for ${{ inputs.image_name }}:${{ inputs.image_tag }} (${{ inputs.env_name }})
           head: ${{ inputs.image_name }}-${{ github.run_id }}-${{ inputs.env_name }}
           base: ${{ inputs.gh_base_branch }}
