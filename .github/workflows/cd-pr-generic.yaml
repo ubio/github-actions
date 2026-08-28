@@ -51,16 +51,10 @@ jobs:
         run: |
           set -euo pipefail
 
-          docker pull mikefarah/yq:3
-          yq() {
-            docker run --rm \
-              --user "$(id -u):$(id -g)" \
-              -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" \
-              -w "${GITHUB_WORKSPACE}" \
-              mikefarah/yq:3 \
-              "$@"
-          }
-          curl -sL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.1.1/kustomize_v5.1.1_linux_amd64.tar.gz | sudo tar xz -C /usr/local/bin
+          YQ="${RUNNER_TEMP}/yq"
+          curl -sSL --fail -o "${YQ}" https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_amd64
+          chmod +x "${YQ}"
+          curl -sSL --fail https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.1.1/kustomize_v5.1.1_linux_amd64.tar.gz | sudo tar xz -C /usr/local/bin
 
           trim() {
             local s="$1"
@@ -82,7 +76,7 @@ jobs:
           else
             while IFS= read -r file; do
               [ -z "$file" ] && continue
-              name="$(yq r "$file" "images.(name==${IMAGE_NAME}).name" || true)"
+              name="$("${YQ}" r "$file" "images.(name==${IMAGE_NAME}).name" || true)"
               if [ "$name" = "${IMAGE_NAME}" ]; then
                 file="${file#./}"
                 paths+=("${file%/overlays/${ENV_NAME}/kustomization.yaml}")
@@ -100,7 +94,7 @@ jobs:
           files=()
           for path in "${paths[@]}"; do
             echo "Updating ${path}"
-            yq w -i "./${path}/overlays/${ENV_NAME}/kustomization.yaml" "images.(name==${IMAGE_NAME}).newTag" "${IMAGE_TAG}"
+            "${YQ}" w -i "./${path}/overlays/${ENV_NAME}/kustomization.yaml" "images.(name==${IMAGE_NAME}).newTag" "${IMAGE_TAG}"
 
             overlay="./${path}/overlays/${ENV_NAME}"
             manifest="./${path}/manifests/${ENV_NAME}/install.yaml"
